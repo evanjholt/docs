@@ -3,14 +3,18 @@
   "theme": "mint",
   "name": "NorthAxium Data",
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/mark.svg",
+    "dark": "/logo/mark.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0A0A0A",
-    "light": "#EAEAEA",
-    "dark": "#0A0A0A"
+    "primary": "#1d1b16",
+    "light": "#38352d",
+    "dark": "#18E299"
+  },
+  "background": {
+    "light": "#f8f6f1",
+    "dark": "#14120c"
   },
   "navbar": {
     "links": [
