@@ -1,80 +1,99 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Make your first API request in under 2 minutes.
 ---
 
-## Get started in three steps
+## 1. Get an API key
 
-Get your documentation site running locally and make your first customization.
+Sign up at [northaxiumdata.ca](https://northaxiumdata.ca) to get a Developer or Pro key. Or use the free demo key from the [Authentication](/authentication) page to try the API immediately.
 
-### Step 1: Set up your local environment
+## 2. Make your first request
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5"
+```
 
-### Step 2: Deploy your changes
+## 3. Explore the data
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+**Who is lobbying the federal government right now?**
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/lobbying/registrations?active=true&limit=10"
+```
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+**What contracts has a vendor won?**
 
-### Step 3: Go live
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/vendors/Palantir%20Technologies%20Canada%20Inc"
+```
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+**Search across all datasets at once:**
+
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/search?q=Shopify"
+```
+
+## Response format
+
+All list endpoints return the same envelope:
+
+```json
+{
+  "data": [...],
+  "meta": {
+    "total": 1234,
+    "page": 1,
+    "per_page": 50
+  }
+}
+```
+
+All single-item endpoints return:
+
+```json
+{
+  "data": { ... }
+}
+```
+
+Errors return:
+
+```json
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+## Rate limit headers
+
+Every response includes rate limit headers:
+
+```
+X-RateLimit-Limit: 10000
+X-RateLimit-Remaining: 9987
+X-RateLimit-Reset: 1714953600000
+```
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
-
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Authentication" icon="key" href="/authentication">
+    Understand API keys and tiers
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/contracts">
+    Full endpoint documentation
+  </Card>
+  <Card title="Data Coverage" icon="database" href="/data-coverage">
+    What data is available and when it updates
+  </Card>
+  <Card title="MCP Server" icon="robot" href="/mcp/overview">
+    Use NorthAxium Data with Claude
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

@@ -1,0 +1,60 @@
+---
+title: Introduction
+description: Canada's Government Data API — procurement, lobbying, grants, contributions, parliamentary data, and building permits in one unified platform.
+---
+
+NorthAxium Data is a REST API that aggregates Canadian federal and municipal government data into a single normalized, queryable platform.
+
+## What's in the API
+
+| Domain | Records | Source |
+|---|---|---|
+| Federal Contracts | 1.3M+ | CanadaBuys / TBS |
+| Federal Grants | 1.28M+ | TBS Proactive Disclosure |
+| Research Grants | 921K+ | NSERC + SSHRC |
+| Infrastructure Projects | 20K+ | Infrastructure Canada |
+| Lobbying Registrations | 166K+ | LobbyCan |
+| Lobbying Communications | 354K+ | LobbyCan |
+| Political Contributions | 6.2M+ | Elections Canada |
+| Parliamentary Bills | 446 | OpenParliament |
+| Politicians | 14K+ | OpenParliament |
+| Building Permits | 2.5M+ | 17 municipalities |
+
+## Base URL
+
+```
+https://api.northaxiumdata.ca
+```
+
+## Authentication
+
+All `/api/v1/*` endpoints require an API key passed in the `X-API-Key` header.
+
+```bash
+curl -H "X-API-Key: YOUR_API_KEY" \
+  https://api.northaxiumdata.ca/api/v1/contracts?limit=5
+```
+
+<Card title="Get your API key" icon="key" href="/authentication">
+  Learn how to authenticate and get started in minutes.
+</Card>
+
+## Try it now
+
+Use the free demo key to make your first request — no sign-up required:
+
+```bash
+curl -H "X-API-Key: demo_XXXX" \
+  https://api.northaxiumdata.ca/api/v1/contracts?limit=3
+```
+
+<Note>
+  Replace `demo_XXXX` with the demo key shown on the [Authentication](/authentication) page.
+</Note>
+
+## What makes NorthAxium Data different
+
+- **Unified platform** — one API key, one schema, one integration covers everything
+- **Parliamentary data** — bills, politicians, committee memberships, lobbying interactions with named officials
+- **AI-native** — MCP server lets Claude and other AI agents query the data directly in natural language
+- **Direct billing** — no RapidAPI middleman, direct Stripe subscription

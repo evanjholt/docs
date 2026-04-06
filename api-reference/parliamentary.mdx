@@ -1,0 +1,98 @@
+---
+title: Parliamentary
+description: Bills, politicians, and committees from OpenParliament.
+---
+
+Base path: `/api/v1`
+
+## Bills
+
+`GET /api/v1/bills`
+
+Parliamentary bills from OpenParliament.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `q` | string | Partial match on bill name (English) |
+| `session` | string | Session identifier e.g. `44-1` |
+| `status` | string | Exact match on `status_code` |
+| `sponsor` | string | Partial match on sponsor name |
+| `sector` | string | Exact sector tag match |
+| `law` | boolean | `true` for bills that became law |
+| `private_member` | boolean | `true` for private member bills |
+| `page` | integer | Page number (default: 1) |
+| `per_page` | integer | Results per page (default: 50, max: 200) |
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/bills?q=mining&session=44-1"
+```
+
+---
+
+## Bill detail
+
+`GET /api/v1/bills/{session}/{number}`
+
+Full bill detail including AI analysis (when available), text summaries, and vote history.
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/bills/44-1/C-69"
+```
+
+---
+
+## Politicians
+
+`GET /api/v1/politicians`
+
+Current and historical federal politicians. Defaults to current sitting MPs only.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `q` | string | Partial match on name |
+| `party` | string | Partial match on party |
+| `province` | string | Two-letter province code |
+| `current` | boolean | `true` (default) for current MPs only; `false` for all |
+| `page` | integer | Page number (default: 1) |
+| `per_page` | integer | Results per page (default: 50, max: 200) |
+
+---
+
+## Politician profile
+
+`GET /api/v1/politicians/{slug}`
+
+Full politician profile including election history, committee memberships, lobbying interactions where this politician was a DPOH, and bill sponsorships.
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/politicians/mark-carney"
+```
+
+---
+
+## Committees
+
+`GET /api/v1/committees`
+
+Parliamentary committees.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `q` | string | Partial match on committee name |
+| `page` | integer | Page number (default: 1) |
+
+---
+
+## Committee detail
+
+`GET /api/v1/committees/{identifier}`
+
+Committee profile including current members, recent meetings, and activities. `identifier` accepts slug or acronym (e.g. `fina`).
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/committees/fina"
+```

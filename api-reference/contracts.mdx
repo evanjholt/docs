@@ -1,0 +1,134 @@
+---
+title: Contracts & Procurement
+description: Federal contracts, disclosures, vendors, departments, and procurement lifecycle.
+---
+
+Base path: `/api/v1`
+
+## List contracts
+
+`GET /api/v1/contracts`
+
+Returns paginated federal contract records.
+
+**Query parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `vendor` | string | Partial match on vendor name |
+| `department` | string | Partial match on department name |
+| `method` | string | Exact match on `procurement_method` |
+| `source` | string | Exact match on `source_dataset` |
+| `min_value` | number | Minimum contract value (CAD) |
+| `max_value` | number | Maximum contract value (CAD) |
+| `date_from` | string | ISO 8601 start date |
+| `date_to` | string | ISO 8601 end date |
+| `page` | integer | Page number (default: 1) |
+| `per_page` | integer | Results per page (default: 50, max: 200) |
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5"
+```
+
+---
+
+## Get contract
+
+`GET /api/v1/contracts/{record_id}`
+
+Returns a single contract by `record_id`.
+
+---
+
+## Contract stats
+
+`GET /api/v1/contracts/stats`
+
+Returns grouped contract statistics.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `group_by` | string | `department`, `vendor`, or `year` (default: `department`) |
+| `limit` | integer | Max results (default: 100, max: 200) |
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/contracts/stats?group_by=department&limit=10"
+```
+
+---
+
+## TBS disclosures
+
+`GET /api/v1/disclosures`
+
+Returns TBS proactive disclosure contract records. Same parameters as `/contracts`.
+
+---
+
+## Procurement lifecycle
+
+`GET /api/v1/procurement/{solicitation_number}`
+
+Returns all tender, award, and contract rows linked by a solicitation number.
+
+<Note>
+  Solicitation number coverage is approximately 4% of procurement records. Many contracts do not carry a solicitation number in the source data.
+</Note>
+
+---
+
+## Browse vendors
+
+`GET /api/v1/vendors`
+
+Browse all contract vendors ranked by total contract value.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `q` | string | Partial match on vendor name |
+| `sort_by` | string | `total_value` or `contract_count` (default: `total_value`) |
+| `limit` | integer | Max results (default: 100) |
+
+---
+
+## Vendor profile
+
+`GET /api/v1/vendors/{name}`
+
+Returns an aggregated procurement profile including total value, departments, and recent contracts.
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/vendors/Palantir%20Technologies%20Canada%20Inc"
+```
+
+---
+
+## Browse departments
+
+`GET /api/v1/departments`
+
+Browse all departments ranked by record count.
+
+---
+
+## Department profile
+
+`GET /api/v1/departments/{name}`
+
+Returns a department procurement profile including top vendors, event type breakdown, and recent contracts.
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/departments/National%20Defence%20%7C%20D%C3%A9fense%20nationale"
+```
+
+---
+
+## Source inventory
+
+`GET /api/v1/sources`
+
+Returns all loaded source datasets with record counts.

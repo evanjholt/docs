@@ -1,0 +1,65 @@
+---
+title: Data Coverage
+description: What data is available, record counts, sources, and known constraints.
+---
+
+## Datasets
+
+| Dataset | Records | Update Frequency | Source |
+|---|---|---|---|
+| Federal Contracts | 1,232,385 | Weekly | CanadaBuys |
+| Federal Grants | 1,276,865 | Quarterly | TBS / open.canada.ca |
+| NSERC Research Grants | 701,310 | Annual | NSERC open data |
+| SSHRC Research Grants | 220,276 | Annual | SSHRC open data |
+| Infrastructure Projects | 20,474 | Periodic | Infrastructure Canada |
+| Lobbying Registrations | 166,941 | Weekly | LobbyCan |
+| Lobbying Communications | 354,745 | Weekly | LobbyCan |
+| Political Contributions | 6,204,260 | Per election | Elections Canada (reviewed) |
+| Parliamentary Bills | 446 | Per session | OpenParliament |
+| Politicians | 14,299 | Per election | OpenParliament |
+| Building Permits | 2,511,023 | Daily–Weekly | 17 municipalities |
+
+## Building permits — city coverage
+
+| Municipality | Records | Geometry Coverage |
+|---|---|---|
+| Montreal | 549,659 | 98.9% |
+| Calgary | 486,511 | 100% |
+| Edmonton | 233,296 | 94.3% |
+| Toronto | 233,235 | 98.1% |
+| Brampton | 218,413 | 100% |
+| Hamilton | 194,464 | 79.2% |
+| Laval | 172,136 | 84.6% |
+| Winnipeg | 157,949 | 99.9% |
+| Kitchener | 74,849 | 100% |
+| Quebec City | 61,007 | 100% |
+| Vancouver | 50,037 | 99.7% |
+| Mississauga | 33,217 | 100% |
+| Regina | 15,742 | 88.1% |
+| Halifax | 14,874 | 100% |
+| Ottawa | 7,477 | 60% |
+| Victoria | 5,526 | 100% |
+| Saint John | 2,631 | 100% |
+
+## Known constraints
+
+<AccordionGroup>
+  <Accordion title="Grant recipient name fragmentation">
+    Federal grants recipient names are source-fragmented. The same institution may appear under multiple English, French, or bilingual strings in the TBS source. Use `/api/v1/grants/recipients?q=...` to see all matching strings before profiling a recipient.
+  </Accordion>
+  <Accordion title="Lobbying lobbyist name coverage">
+    Event-level `lobbyist_name` is sparse at source (~2–3%). The API falls back through the matching registration row, raising effective coverage to ~90%. The MCP tool reflects the same fallback.
+  </Accordion>
+  <Accordion title="Ottawa permits geometry">
+    Ottawa permit geometry is approximately 60% due to inconsistent source address strings. This is a source-data quality constraint, not an ingestion issue.
+  </Accordion>
+  <Accordion title="Victoria permits — rolling feed only">
+    Victoria publishes only a rolling 365-day permit feed. No historical Victoria permit data is available from the source.
+  </Accordion>
+  <Accordion title="Procurement category filter">
+    The `/contracts` category filter is not yet available. The source `commodity_type` field uses internal codes (`S`, `G`, `C`) rather than a public taxonomy.
+  </Accordion>
+  <Accordion title="Parliamentary data lag">
+    Parliamentary data (committee memberships, current MPs) reflects the OpenParliament snapshot at ingestion time and may lag live Parliament by days to weeks.
+  </Accordion>
+</AccordionGroup>

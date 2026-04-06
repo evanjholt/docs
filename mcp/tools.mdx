@@ -1,0 +1,100 @@
+---
+title: MCP Tools Reference
+description: Complete reference for all 15 NorthAxium Data MCP tools.
+---
+
+## Procurement
+
+### `search_contracts`
+Search federal contracts by vendor, department, value, and date. Returns paginated contract records.
+
+### `search_vendors`
+Browse distinct vendor name strings before resolving a profile. Use when the vendor name is ambiguous.
+
+**Pattern:** `search_vendors` → `get_vendor_profile`
+
+### `get_vendor_profile`
+Aggregated contract profile for a named vendor: total value, departments, and recent contracts.
+
+### `get_department_profile`
+Aggregated procurement profile for a department: total spend, top vendors, event type breakdown.
+
+---
+
+## Grants
+
+### `search_grants`
+Search across three grant datasets. Specify `dataset`: `federal_grants`, `research_grants`, or `infrastructure_projects`.
+
+### `search_grant_recipients`
+Browse distinct recipient name strings before resolving a profile. Use when recipient name is ambiguous.
+
+**Pattern:** `search_grant_recipients` → `get_grant_recipient_profile`
+
+### `get_grant_recipient_profile`
+Aggregated grants profile for a recipient: total value, top departments, recent grants.
+
+---
+
+## Lobbying
+
+### `search_lobbying`
+Search lobbying registrations — what organizations are registered to lobby and on what subjects.
+
+### `get_lobbying_communications`
+Search actual communication records — who lobbyists have met with and when.
+
+### `get_client_profile`
+Aggregated lobbying profile for a client: total communications, top institutions, top subjects.
+
+**Pattern:** `get_client_profile` → `get_lobbying_communications` for timeline detail
+
+---
+
+## Political Contributions
+
+### `search_contributions`
+Search Elections Canada reviewed contributions by contributor, party, year, province, and amount.
+
+---
+
+## Parliamentary
+
+### `search_bills`
+Search parliamentary bills by topic, session, status, sponsor, and sector.
+
+### `search_politicians`
+Search current and historical MPs. Use to resolve a name to a slug.
+
+**Pattern:** `search_politicians` → `get_politician_profile`
+
+### `get_politician_profile`
+Full politician profile: election history, committee memberships, lobbying interactions as DPOH, bill sponsorships.
+
+---
+
+## Permits
+
+### `search_permits`
+Search building permits across 17 municipalities. Supports proximity search by lat/lng/radius.
+
+---
+
+## Recommended patterns
+
+**Vendor research:**
+1. `search_vendors(q="Dow")` — find the exact vendor string
+2. `get_vendor_profile(name="Dow Chemical Canada ULC")` — get full profile
+
+**Lobbying → contracts sequence:**
+1. `get_client_profile(name="Palantir")` — see lobbying activity
+2. `search_contracts(vendor="Palantir")` — see contract wins
+3. Compare dates to detect lobby-to-contract timing
+
+**Politician research:**
+1. `search_politicians(q="Carney")` — resolve slug
+2. `get_politician_profile(slug="mark-carney")` — get full profile
+
+**Grant disambiguation:**
+1. `search_grant_recipients(q="McGill")` — see all name variants
+2. `get_grant_recipient_profile(name="McGill University / Université McGill")` — profile with exact string

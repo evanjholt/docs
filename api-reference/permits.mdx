@@ -1,0 +1,63 @@
+---
+title: Building Permits
+description: 2.5M+ building permits across 17 Canadian municipalities with proximity search.
+---
+
+Base path: `/api/v1`
+
+## List permits
+
+`GET /api/v1/permits`
+
+Building permits across 17 municipalities with optional proximity search.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `municipality` | string | Comma-separated city slugs (see below) |
+| `q` | string | Partial match on address or work description |
+| `permit_type` | string | `new_construction`, `renovation`, `addition`, `demolition`, `change_of_use`, `other` |
+| `status` | string | `issued`, `in_review`, `completed`, `cancelled`, `expired` |
+| `issued_after` | string | ISO 8601 lower bound on issued date |
+| `issued_before` | string | ISO 8601 upper bound on issued date |
+| `lat` | number | Latitude for proximity search |
+| `lng` | number | Longitude for proximity search |
+| `radius_km` | number | Search radius in km (0.1–100; required with lat/lng) |
+| `sort_by` | string | `date` or `value` (default: `date`; ignored in proximity mode) |
+| `limit` | integer | Max results (default: 100, max: 500) |
+| `offset` | integer | Offset for pagination |
+
+**Valid municipality slugs:**
+`toronto` · `calgary` · `edmonton` · `ottawa` · `vancouver` · `montreal` · `winnipeg` · `hamilton` · `kitchener` · `victoria` · `laval` · `mississauga` · `halifax` · `brampton` · `quebec_city` · `regina` · `saint_john`
+
+```bash
+# Proximity search — permits within 1km of CN Tower
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/permits?lat=43.6426&lng=-79.3871&radius_km=1&permit_type=new_construction"
+```
+
+---
+
+## Permit detail
+
+`GET /api/v1/permits/{record_id}`
+
+Returns a single permit record with full detail including geometry coordinates and source URL.
+
+---
+
+## Permit stats
+
+`GET /api/v1/permits/stats`
+
+Grouped permit statistics.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `group_by` | string | `municipality`, `permit_type`, `status`, or `province` (default: `municipality`) |
+| `municipality` | string | Comma-separated city slugs |
+| `period` | string | `1y`, `6m`, `3m`, or `30d` |
+
+```bash
+curl -H "X-API-Key: YOUR_KEY" \
+  "https://api.northaxiumdata.ca/api/v1/permits/stats?group_by=permit_type&municipality=toronto&period=1y"
+```
