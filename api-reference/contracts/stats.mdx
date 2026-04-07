@@ -1,6 +1,88 @@
 ---
 title: "Contract Stats"
-description: "Aggregated contract statistics grouped by department, vendor, or year"
+description: "Aggregated contract statistics grouped by department, vendor, or year."
+api: "GET https://api.northaxiumdata.ca/api/v1/contracts/stats"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns grouped aggregate statistics across all federal contract records. Useful for spending breakdowns by department, vendor rankings by total value, or year-over-year procurement trends.
+
+## Query Parameters
+
+<ParamField query="group_by" type="string">
+  Grouping dimension. Options: `department`, `vendor`, `year`. Default: `department`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Max groups to return. Default: `100`. Max: `200`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/contracts/stats?group_by=department&limit=10"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+params = {"group_by": "department", "limit": 10}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/contracts/stats",
+    headers=headers,
+    params=params
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "department": "National Defence | Défense nationale",
+      "total_value": 4821034521.00,
+      "contract_count": 18432
+    },
+    {
+      "department": "Public Services and Procurement Canada | Services publics et Approvisionnement Canada",
+      "total_value": 3109823400.00,
+      "contract_count": 12891
+    }
+  ],
+  "meta": {
+    "group_by": "department",
+    "total_groups": 482
+  }
+}
+```
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid group_by value. Must be one of: department, vendor, year."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

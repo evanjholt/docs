@@ -1,6 +1,103 @@
 ---
 title: "TBS Disclosures"
-description: "TBS proactive disclosure contract records"
+description: "TBS proactive disclosure contract records from open.canada.ca."
+api: "GET https://api.northaxiumdata.ca/api/v1/disclosures"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns Treasury Board of Canada Secretariat (TBS) proactive disclosure records — the government's mandatory public reporting of contracts over $10,000. Accepts the same filter parameters as the main contracts endpoint.
+
+## Query Parameters
+
+<ParamField query="vendor" type="string">
+  Partial match on vendor name
+</ParamField>
+
+<ParamField query="department" type="string">
+  Partial match on department name
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum contract value in CAD
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum contract value in CAD
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  ISO 8601 start date
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  ISO 8601 end date
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Results per page. Default: `50`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Pagination offset. Default: `0`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/disclosures?department=National%20Defence&limit=10"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+params = {"department": "National Defence", "limit": 10}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/disclosures",
+    headers=headers,
+    params=params
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "record_id": "def456abc",
+      "vendor": "Lockheed Martin Canada Inc",
+      "department": "National Defence | Défense nationale",
+      "value": 8430000.00,
+      "event_date": "2023-09-30",
+      "source_dataset": "open.canada contracts (PP-Contracts)"
+    }
+  ],
+  "meta": {
+    "total": 550306,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

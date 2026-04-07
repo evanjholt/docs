@@ -1,6 +1,105 @@
 ---
 title: "Contributor Profiles"
-description: "Aggregated contribution profile for a named contributor"
+api: "GET /contributions/profiles/{id}"
+description: "Retrieve political contribution history for a specific individual or organization."
 ---
 
-*Coming soon.*
+Get a comprehensive view of all federal political contributions linked to a specific entity across multiple years, parties, and candidates.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier for the contributor (e.g., `CTR-48912`).
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/v1/contributions/profiles/CTR-48912" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/v1/contributions/profiles/CTR-48912"
+headers = {"X-API-Key": "<your-api-key>"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+fetch('https://api.northaxiumdata.ca/v1/contributions/profiles/CTR-48912', {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": {
+    "contributor_id": "CTR-48912",
+    "name": "Jane Doe",
+    "city": "Vancouver",
+    "province": "BC",
+    "total_contributed_amount": 4200.00,
+    "first_contribution_date": "2015-10-04",
+    "latest_contribution_date": "2023-09-22",
+    "donations": [
+      {
+        "amount": 1600.00,
+        "date": "2023-09-22",
+        "recipient": "Conservative Party of Canada"
+      }
+    ]
+  }
+}
+```
+
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid parameter value."
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "The requested resource was not found."
+  }
+}
+```
+
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded."
+  }
+}
+```
+
+</ResponseExample>

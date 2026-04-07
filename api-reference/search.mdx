@@ -1,6 +1,126 @@
 ---
-title: "Search"
-description: "Cross-dataset search across all domains"
+title: "Universal Search"
+api: "GET /search"
+description: "Search across all federal datasets simultaneously."
 ---
 
-*Coming soon.*
+Perform a global text search to find references to a specific company, individual, or query across contracts, lobbying, grants, contributions, and parliament.
+
+### Query Parameters
+
+<ParamField query="query" type="string" required>
+  The search term or phrase (e.g., `"Green Energy"`, `"Jane Doe"`).
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of search results to return across all categories. Maximum limits map to your plan (50 for Basic, 500 for Pro, 5,000 for Enterprise).
+</ParamField>
+
+<ParamField query="type" type="string">
+  Restrict search to a specific dataset type (e.g., `contracts`, `lobbying`). If omitted, searches all available datasets.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/v1/search?query=Green+Energy&limit=5" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/v1/search"
+headers = {"X-API-Key": "<your-api-key>"}
+params = {
+    "query": "Green Energy",
+    "limit": 5
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+const url = new URL('https://api.northaxiumdata.ca/v1/search');
+url.search = new URLSearchParams({
+  query: 'Green Energy',
+  limit: '5'
+});
+
+fetch(url, {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": [
+    {
+      "type": "contract",
+      "id": "CON-8841-A",
+      "title": "Solar Panel Installation",
+      "snippet": "...awarded to Green Energy Co. for the installation of..."
+    },
+    {
+      "type": "lobbying_registration",
+      "id": "812039-12345",
+      "title": "Green Energy Solutions Corp.",
+      "snippet": "...registration details for Green Energy Solutions Corp. representing..."
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid parameter value."
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "The requested resource was not found."
+  }
+}
+```
+
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded."
+  }
+}
+```
+
+</ResponseExample>

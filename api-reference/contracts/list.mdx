@@ -1,6 +1,140 @@
 ---
 title: "List Contracts"
-description: "Search and filter federal procurement contracts"
+description: "Search and filter federal procurement contracts from CanadaBuys and TBS."
+api: "GET https://api.northaxiumdata.ca/api/v1/contracts"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns paginated federal contract records from CanadaBuys and TBS Proactive Disclosure. Use `vendor`, `department`, and date filters to narrow results. For an aggregated view of a specific vendor, use the [Vendor Profile](/api-reference/vendors/profile) endpoint instead.
+
+## Getting Started
+
+There are only 3 steps for making a successful API call:
+
+1. Add your API key to the header as `X-API-Key`
+2. Add query parameters to filter the data
+3. Execute the request
+
+## Query Parameters
+
+<ParamField query="vendor" type="string">
+  Partial match on vendor name (case-insensitive)
+</ParamField>
+
+<ParamField query="department" type="string">
+  Partial match on department name (case-insensitive)
+</ParamField>
+
+<ParamField query="method" type="string">
+  Exact match on `procurement_method` field
+</ParamField>
+
+<ParamField query="source" type="string">
+  Exact match on `source_dataset` field
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum contract value in CAD
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum contract value in CAD
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  ISO 8601 start date — e.g. `2023-01-01`
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  ISO 8601 end date — e.g. `2023-12-31`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Results per page. Default: `50`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Pagination offset. Default: `0`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+params = {"vendor": "Palantir", "limit": 5}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/contracts",
+    headers=headers,
+    params=params
+)
+data = response.json()
+
+for contract in data["data"]:
+    print(f"{contract['vendor']}: ${contract['value']:,.0f}")
+```
+
+```javascript JavaScript
+const response = await fetch(
+  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5",
+  { headers: { "X-API-Key": "your_api_key_here" } }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "record_id": "abc123xyz",
+      "vendor": "Palantir Technologies Canada Inc",
+      "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
+      "value": 1250000.00,
+      "event_date": "2023-06-15",
+      "procurement_method": "Non-competitive",
+      "source_dataset": "open.canada contracts (PP-Contracts)",
+      "source_url": "https://buyandsell.gc.ca/..."
+    }
+  ],
+  "meta": {
+    "total": 47,
+    "limit": 5,
+    "offset": 0
+  }
+}
+```
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid date format for date_from. Use ISO 8601 (YYYY-MM-DD)."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

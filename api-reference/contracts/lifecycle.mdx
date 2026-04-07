@@ -1,6 +1,95 @@
 ---
 title: "Procurement Lifecycle"
-description: "Full tender → award → contract chain by solicitation number"
+description: "Full tender → award → contract chain linked by solicitation number."
+api: "GET https://api.northaxiumdata.ca/api/v1/procurement/{solicitation_number}"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns all procurement events — tender notices, award notices, and contracts — linked by a common `solicitation_number`. Use this to trace the full lifecycle of a competitive procurement from open tender through to final contract award.
+
+<Note>
+  Solicitation number coverage is approximately 4% of total procurement records. Many contracts in the TBS disclosure dataset do not carry a solicitation number in the source data.
+</Note>
+
+## Path Parameters
+
+<ParamField path="solicitation_number" type="string" required>
+  The solicitation number to look up — e.g. `PS23-AG-004`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/procurement/PS23-AG-004"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+solicitation = "PS23-AG-004"
+
+response = requests.get(
+    f"https://api.northaxiumdata.ca/api/v1/procurement/{solicitation}",
+    headers=headers
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "solicitation_number": "PS23-AG-004",
+    "tender": {
+      "record_id": "tender_abc",
+      "closing_date": "2023-03-15",
+      "department": "Public Services and Procurement Canada"
+    },
+    "awards": [
+      {
+        "record_id": "award_xyz",
+        "vendor": "Acme Government Solutions Inc",
+        "value": 450000.00,
+        "award_date": "2023-04-02"
+      }
+    ],
+    "contracts": [
+      {
+        "record_id": "contract_123",
+        "vendor": "Acme Government Solutions Inc",
+        "value": 450000.00,
+        "event_date": "2023-04-15"
+      }
+    ]
+  }
+}
+```
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "No procurement records found for solicitation number PS23-AG-004."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

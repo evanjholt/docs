@@ -3,4 +3,38 @@ title: "Support"
 description: "Get help with NorthAxium Data."
 ---
 
-*Coming soon.*
+## Contact
+
+For questions about the API, data quality issues, or billing:
+
+**Email:** [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca)
+
+## Common questions
+
+<AccordionGroup>
+
+  <Accordion title="How do I get an API key?">
+    Sign up at [northaxiumdata.ca](https://northaxiumdata.ca). Your API key is generated immediately on subscription. You can also try the API using the free demo key on the [Authentication](/authentication) page — no account required.
+  </Accordion>
+
+  <Accordion title="What counts as a request?">
+    Every authenticated call to any `/api/v1/*` endpoint counts as one request against your monthly limit. The `/health` endpoint is unprotected and does not count. Rate limit consumption is tracked in the `X-RateLimit-Remaining` header on every response.
+  </Accordion>
+
+  <Accordion title="How fresh is the data?">
+    Procurement and lobbying data refreshes weekly from source. Grants refresh quarterly. Building permits refresh daily to weekly depending on the municipality. See the [Coverage](/data-coverage) page for full refresh frequencies by dataset.
+  </Accordion>
+
+  <Accordion title="I found a data quality issue — what should I do?">
+    Email [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca) with the endpoint, the query, and a description of the issue. Include the `record_id` if you have it. Known constraints are documented on the [Coverage](/data-coverage) page.
+  </Accordion>
+
+  <Accordion title="Can I use NorthAxium Data with Claude?">
+    Yes — the MCP server lets Claude Desktop query the API directly in natural language. See the [MCP Server](/mcp) page for setup instructions. MCP access requires a Developer or Pro plan.
+  </Accordion>
+
+  <Accordion title="Do you offer a free tier?">
+    Yes. The free plan includes 500 requests per month. You can also use the public demo key for immediate access without creating an account — see [Authentication](/authentication).
+  </Accordion>
+
+</AccordionGroup>

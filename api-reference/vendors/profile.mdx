@@ -1,6 +1,89 @@
 ---
 title: "Vendor Profile"
-description: "Aggregated procurement profile for a named vendor"
+description: "Aggregated procurement profile for a named federal contractor."
+api: "GET https://api.northaxiumdata.ca/api/v1/vendors/{name}"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns an aggregated procurement profile for a vendor — total contract value, contract count, top departments, and recent contracts. The `name` parameter must match the vendor string exactly as it appears in the source data. Use [Browse Vendors](/api-reference/vendors/list) first to find the exact string.
+
+## Path Parameters
+
+<ParamField path="name" type="string" required>
+  Exact vendor name string as it appears in the source data — e.g. `Palantir Technologies Canada Inc`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/vendors/Palantir%20Technologies%20Canada%20Inc"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+vendor = "Palantir Technologies Canada Inc"
+
+response = requests.get(
+    f"https://api.northaxiumdata.ca/api/v1/vendors/{vendor}",
+    headers=headers
+)
+profile = response.json()["data"]
+print(f"Total value: ${profile['total_value']:,.0f}")
+print(f"Top department: {profile['top_departments'][0]['department']}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "vendor": "Palantir Technologies Canada Inc",
+    "total_value": 23840000.00,
+    "contract_count": 14,
+    "top_departments": [
+      {
+        "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
+        "total_value": 12500000.00,
+        "contract_count": 8
+      }
+    ],
+    "recent_contracts": [
+      {
+        "record_id": "abc123",
+        "value": 3200000.00,
+        "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
+        "event_date": "2023-11-01"
+      }
+    ]
+  }
+}
+```
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "No vendor profile found. Use /api/v1/vendors?q=... to find the exact source string."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

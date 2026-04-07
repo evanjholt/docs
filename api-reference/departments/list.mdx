@@ -1,6 +1,73 @@
 ---
 title: "Browse Departments"
-description: "All departments ranked by contract record count"
+description: "Browse all federal departments ranked by procurement record count."
+api: "GET https://api.northaxiumdata.ca/api/v1/departments"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns all distinct federal department strings ranked by contract record count. Use to find the exact department name before calling [Department Profile](/api-reference/departments/profile).
+
+## Query Parameters
+
+<ParamField query="q" type="string">
+  Partial match on department name
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Max results. Default: `100`. Max: `200`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/departments?q=Defence"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/departments",
+    headers=headers,
+    params={"q": "Defence"}
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "department": "National Defence | Défense nationale",
+      "record_count": 18432
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "limit": 100,
+    "offset": 0
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

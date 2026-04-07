@@ -1,6 +1,144 @@
 ---
 title: "How to Search Federal Contracts"
-description: "A step-by-step Python guide to querying federal procurement records with the NorthAxium Data API."
+description: "Query 1.3M+ federal procurement records to find vendor contract history, departmental spend, and procurement patterns."
 ---
 
-*Coming soon.*
+The NorthAxium Data contracts API gives you access to 1.3M+ federal procurement records from CanadaBuys and TBS Proactive Disclosure. This guide walks through the most common query patterns — searching by vendor, filtering by department and value, and pulling aggregated statistics.
+
+## Prerequisites
+
+- A NorthAxium Data API key ([get one here](https://northaxiumdata.ca) or use the [free demo key](/authentication))
+- Python 3.8+ with the `requests` library installed (`pip install requests`)
+
+## Search contracts by vendor
+
+The most common use case: find all contracts awarded to a specific company.
+
+```python
+import requests
+
+# your API key
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.northaxiumdata.ca/api/v1"
+headers = {"X-API-Key": API_KEY}
+
+# search contracts for a vendor
+params = {
+    "vendor": "Palantir",   # partial match — finds all Palantir entities
+    "limit": 10,
+    "sort_by": "value",     # largest contracts first
+}
+
+response = requests.get(f"{BASE_URL}/contracts", headers=headers, params=params)
+data = response.json()
+
+print(f"Total contracts found: {data['meta']['total']}")
+print()
+
+for contract in data["data"]:
+    print(f"Vendor:     {contract['vendor']}")
+    print(f"Department: {contract['department']}")
+    print(f"Value:      ${contract['value']:,.0f}")
+    print(f"Date:       {contract['event_date']}")
+    print(f"Method:     {contract['procurement_method']}")
+    print("---")
+```
+
+## Filter by department and value range
+
+Narrow results to a specific department and minimum contract size.
+
+```python
+params = {
+    "department": "National Defence",   # partial match on department name
+    "min_value": 1000000,               # contracts over $1M CAD
+    "date_from": "2022-01-01",
+    "date_to": "2024-12-31",
+    "limit": 20,
+}
+
+response = requests.get(f"{BASE_URL}/contracts", headers=headers, params=params)
+data = response.json()
+
+total_value = sum(c["value"] for c in data["data"] if c.get("value"))
+print(f"Found {data['meta']['total']} contracts — showing {len(data['data'])}")
+print(f"Total value in result set: ${total_value:,.0f}")
+```
+
+## Get an aggregated vendor profile
+
+Once you've found a vendor, pull their full procurement profile — total value, top departments, and recent contracts.
+
+```python
+# Step 1: browse vendors to find the exact source string
+browse = requests.get(
+    f"{BASE_URL}/vendors",
+    headers=headers,
+    params={"q": "Palantir"}
+)
+vendors = browse.json()["data"]
+
+print("Matching vendors:")
+for v in vendors:
+    print(f"  {v['vendor']} — ${v['total_value']:,.0f} across {v['contract_count']} contracts")
+
+# Step 2: use the exact string to get the full profile
+exact_name = vendors[0]["vendor"]
+profile_response = requests.get(
+    f"{BASE_URL}/vendors/{exact_name}",
+    headers=headers
+)
+profile = profile_response.json()["data"]
+
+print(f"\nVendor profile: {profile['vendor']}")
+print(f"Total value: ${profile['total_value']:,.0f}")
+print(f"Contract count: {profile['contract_count']}")
+print("\nTop departments:")
+for dept in profile["top_departments"][:3]:
+    print(f"  {dept['department']}: ${dept['total_value']:,.0f}")
+```
+
+## Get departmental spending statistics
+
+Rank all departments by total procurement spend.
+
+```python
+params = {
+    "group_by": "department",
+    "limit": 10,
+}
+
+response = requests.get(f"{BASE_URL}/contracts/stats", headers=headers, params=params)
+stats = response.json()["data"]
+
+print("Top departments by total contract value:")
+for i, row in enumerate(stats, 1):
+    print(f"  {i}. {row['department']}: ${row['total_value']:,.0f} ({row['contract_count']} contracts)")
+```
+
+## What's happening here
+
+**`vendor` parameter** — partial, case-insensitive match. `"Palantir"` matches `Palantir Technologies Canada Inc`, `Palantir Technologies Inc`, and any other variant in the source data. Use [Browse Vendors](/api-reference/vendors/list) to see all matching strings before profiling.
+
+**`department` parameter** — same partial match behaviour. Federal department names in the source are often bilingual (e.g. `National Defence | Défense nationale`). Passing `"National Defence"` will match the bilingual form.
+
+**`procurement_method`** — common values include `Non-competitive`, `Competitive - Open Bidding`, `Competitive - Selective Tendering`. Use exact string matching on this field.
+
+**Two-step vendor pattern** — always browse first, then profile. The profile endpoint requires the exact source string. Browsing first surfaces all name variants so you pick the right one.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Contracts API Reference" icon="file-contract" href="/api-reference/contracts/list">
+    Full parameter reference for the contracts endpoint
+  </Card>
+  <Card title="Vendor Profiles" icon="building" href="/api-reference/vendors/profile">
+    Aggregated profile for any named vendor
+  </Card>
+  <Card title="Department Profiles" icon="landmark" href="/api-reference/departments/profile">
+    Departmental spend breakdowns
+  </Card>
+  <Card title="Find Lobbying Activity" icon="comments" href="/guides/find-lobbying-activity">
+    Cross-reference contract wins with lobbying records
+  </Card>
+</CardGroup>

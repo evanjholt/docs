@@ -1,6 +1,75 @@
 ---
 title: "Data Sources"
-description: "Where NorthAxium Data comes from. Primary-source ingestion from official Canadian government portals with no third-party vendors."
+description: "NorthAxium Data is a primary-source provider. Every dataset is collected directly from official Canadian government sources — no third-party data vendors."
 ---
 
-*Coming soon.*
+NorthAxium Data is a **primary-source data provider**. Every dataset we deliver is collected, normalized, and served by us — with no third-party data vendors in the chain. This page details exactly where each category of data originates and how it reaches the API.
+
+## Why Provenance Matters
+
+When a journalist traces a contract win, a researcher audits a lobbying interaction, or an AI agent answers a question about government spending — every result needs to trace back to an authoritative source. Third-party data aggregators introduce opacity: you inherit their collection methodology, their errors, and their refresh latency without visibility into any of it.
+
+Our architecture eliminates that layer entirely. You get a direct, auditable path from government source to API response.
+
+## Data Sources
+
+### Federal Contracts & Disclosures
+
+All federal contract and proactive disclosure records are sourced **directly from the CanadaBuys open data portal and the Treasury Board of Canada Secretariat (TBS) Proactive Disclosure CKAN API** (`open.canada.ca`). We ingest from the official government open data endpoints on a weekly cycle.
+
+**Sources:** CanadaBuys, TBS / open.canada.ca CKAN API
+
+### Federal Grants & Contributions
+
+Federal grants are sourced **directly from the TBS Proactive Disclosure CKAN datastore** — the same system that powers open.canada.ca. We page the full dataset on each quarterly refresh and upsert by grant key.
+
+**Source:** TBS / open.canada.ca — resource `1d15a62f-5656-49ad-8c88-f40ce689d831`
+
+### Lobbying
+
+Lobbying registrations and communications are sourced **directly from the Office of the Commissioner of Lobbying (LobbyCan)** via their official registry export files. We ingest one row per communication keyed by the LobbyCan `com_id` — no entity multiplication, no deduplication guesswork.
+
+**Source:** Office of the Commissioner of Lobbying — lobbycanada.gc.ca
+
+### Political Contributions
+
+Contribution data is sourced **directly from Elections Canada's reviewed contributions dataset**, published as official ZIP exports. We hash each normalized row and skip exact duplicates present in the source exports.
+
+**Source:** Elections Canada reviewed contributions — elections.ca
+
+### Research Grants
+
+NSERC and SSHRC research award data is sourced **directly from their respective open data portals**, published as annual award CSV files. NSERC coverage spans 1991 to present; SSHRC spans 1998 to present.
+
+**Sources:** NSERC open data, SSHRC open data
+
+### Infrastructure Projects
+
+Infrastructure Canada project data is sourced **directly from their bilingual project list**, published on the open.canada.ca portal. The bilingual CSV includes French and English fields for project title, program, location, and recipient.
+
+**Source:** Infrastructure Canada — open.canada.ca
+
+### Parliamentary Data
+
+Parliamentary data — bills, politicians, elected member history, committee memberships, votes, and Hansard statements — is sourced **directly from the OpenParliament public API**, which normalizes House of Commons data into a structured, queryable format.
+
+**Source:** OpenParliament API — openparliament.ca
+
+### Building Permits
+
+Municipal permit data is sourced **directly from 17 municipal open data portals**. Each city publishes through one of four portal types: Socrata, CKAN, ArcGIS Feature Service, or Opendatasoft. For cities that do not publish native coordinates, we geocode addresses against the **Statistics Canada Open Database of Addresses (ODA)** — an open-licence reference dataset of ~10M civic addresses.
+
+**Sources:** 17 municipal open data portals; Statistics Canada ODA for geocoding
+
+## No Third-Party Dependencies
+
+Our data pipeline has **zero third-party data vendor dependencies**. This means:
+
+- **Full auditability** — every record traces to a named primary government source
+- **No redistribution risk** — all source data is published under open government licences
+- **Controlled latency** — we own the entire ingestion path; refresh schedules are documented and within our control
+- **Single point of accountability** — if something is wrong with the data, the fix starts here
+
+## Questions
+
+For data quality questions or methodology inquiries, contact us at [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca).

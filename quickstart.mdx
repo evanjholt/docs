@@ -1,99 +1,149 @@
 ---
-title: Quickstart
-description: Make your first API request in under 2 minutes.
+title: "Quick Start"
+description: "Make your first API request in under 2 minutes."
 ---
 
 ## 1. Get an API key
 
-Sign up at [northaxiumdata.ca](https://northaxiumdata.ca) to get a Developer or Pro key. Or use the free demo key from the [Authentication](/authentication) page to try the API immediately.
+Sign up at [northaxiumdata.ca](https://northaxiumdata.ca) and get your API key from the dashboard.
+
+You can try the API immediately without an account using the free demo key:
+
+```
+3ZNJzfM7MAqdMabhbiGuCDuq
+```
+
+The demo key is capped at 500 requests per month and shared across all users. For production use, subscribe to a paid plan.
 
 ## 2. Make your first request
 
-```bash
-curl -H "X-API-Key: YOUR_API_KEY" \
+Every request needs your API key in the `X-API-Key` header.
+
+<CodeGroup>
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+url = "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5"
+
+response = requests.get(url, headers=headers)
+data = response.json()
+
+for contract in data["data"]:
+    print(f"{contract['vendor']}: ${contract['value']:,.0f}")
+```
+
+```javascript JavaScript
+const headers = { "X-API-Key": "your_api_key_here" };
+
+const url = "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5";
+
+const response = await fetch(url, { headers });
+const data = await response.json();
+
+data.data.forEach(contract => {
+  console.log(`${contract.vendor}: $${contract.value.toLocaleString()}`);
+});
+```
+
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
   "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5"
 ```
 
-## 3. Explore the data
+</CodeGroup>
 
-**Who is lobbying the federal government right now?**
+## 3. Explore more endpoints
 
-```bash
-curl -H "X-API-Key: YOUR_API_KEY" \
-  "https://api.northaxiumdata.ca/api/v1/lobbying/registrations?active=true&limit=10"
+Now that you have the basics, try a few more calls:
+
+<AccordionGroup>
+
+<Accordion title="Who is lobbying the federal government?">
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+url = "https://api.northaxiumdata.ca/api/v1/lobbying/communications?limit=10"
+response = requests.get(url, headers=headers)
+
+for comm in response.json()["data"]:
+    print(f"{comm['client_org']} → {comm['dpoh_name']} ({comm['communication_date']})")
 ```
 
-**What contracts has a vendor won?**
+</Accordion>
 
-```bash
-curl -H "X-API-Key: YOUR_API_KEY" \
-  "https://api.northaxiumdata.ca/api/v1/vendors/Palantir%20Technologies%20Canada%20Inc"
+<Accordion title="What has a vendor won in contracts?">
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+# get an aggregated vendor profile
+url = "https://api.northaxiumdata.ca/api/v1/vendors/Palantir%20Technologies%20Canada%20Inc"
+response = requests.get(url, headers=headers)
+
+profile = response.json()["data"]
+print(f"Total value: ${profile['total_value']:,.0f}")
+print(f"Contract count: {profile['contract_count']}")
 ```
 
-**Search across all datasets at once:**
+</Accordion>
 
-```bash
-curl -H "X-API-Key: YOUR_API_KEY" \
-  "https://api.northaxiumdata.ca/api/v1/search?q=Shopify"
+<Accordion title="Track political contributions by party">
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+url = "https://api.northaxiumdata.ca/api/v1/contributions?party=Liberal&limit=10"
+response = requests.get(url, headers=headers)
+
+for contribution in response.json()["data"]:
+    print(f"{contribution['contributor_name']}: ${contribution['monetary_amount']:,.2f}")
 ```
 
-## Response format
+</Accordion>
 
-All list endpoints return the same envelope:
+<Accordion title="Search across all datasets at once">
 
-```json
-{
-  "data": [...],
-  "meta": {
-    "total": 1234,
-    "page": 1,
-    "per_page": 50
-  }
-}
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+# search contracts, lobbying, contributions, parliamentary, and permits simultaneously
+url = "https://api.northaxiumdata.ca/api/v1/search?q=Shopify"
+response = requests.get(url, headers=headers)
+
+results = response.json()["data"]
+for domain, hits in results.items():
+    print(f"{domain}: {len(hits)} results")
 ```
 
-All single-item endpoints return:
+</Accordion>
 
-```json
-{
-  "data": { ... }
-}
-```
+</AccordionGroup>
 
-Errors return:
-
-```json
-{
-  "error": {
-    "code": "UNAUTHORIZED",
-    "message": "Missing API key. Pass your key in the X-API-Key header."
-  }
-}
-```
-
-## Rate limit headers
-
-Every response includes rate limit headers:
-
-```
-X-RateLimit-Limit: 10000
-X-RateLimit-Remaining: 9987
-X-RateLimit-Reset: 1714953600000
-```
-
-## Next steps
+## 4. What's next?
 
 <CardGroup cols={2}>
-  <Card title="Authentication" icon="key" href="/authentication">
-    Understand API keys and tiers
+  <Card title="Federal Contracts" icon="file-contract" href="/api-reference/contracts/list">
+    Search and filter 1.3M+ procurement records
   </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/contracts">
-    Full endpoint documentation
+  <Card title="Lobbying" icon="comments" href="/api-reference/lobbying/communications">
+    Who is meeting with federal officials and why
   </Card>
-  <Card title="Data Coverage" icon="database" href="/data-coverage">
-    What data is available and when it updates
+  <Card title="MCP Server" icon="robot" href="/mcp">
+    Connect Claude directly to NorthAxium Data
   </Card>
-  <Card title="MCP Server" icon="robot" href="/mcp/overview">
-    Use NorthAxium Data with Claude
+  <Card title="Data Sources" icon="database" href="/data-sources">
+    Where the data comes from and how it's ingested
   </Card>
 </CardGroup>

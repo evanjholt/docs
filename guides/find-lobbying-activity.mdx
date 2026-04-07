@@ -1,6 +1,173 @@
 ---
 title: "How to Find Lobbying Activity"
-description: "A step-by-step Python guide to querying the Canadian lobbying registry with the NorthAxium Data API."
+description: "Query 354K+ lobbying communications and 166K+ registrations to track who is lobbying the federal government and why."
 ---
 
-*Coming soon.*
+The NorthAxium Data lobbying API exposes the full LobbyCan registry — registrations (who is registered to lobby and on what subjects) and communications (actual meeting records between lobbyists and federal officials). This guide covers the key query patterns for investigative and business intelligence use cases.
+
+## Prerequisites
+
+- A NorthAxium Data API key ([get one here](https://northaxiumdata.ca) or use the [free demo key](/authentication))
+- Python 3.8+ with the `requests` library installed (`pip install requests`)
+
+## Find who is lobbying on a topic
+
+Search communications by subject matter to find all organizations actively lobbying on a specific issue.
+
+```python
+import requests
+
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.northaxiumdata.ca/api/v1"
+headers = {"X-API-Key": API_KEY}
+
+# find lobbying communications on mining and natural resources
+params = {
+    "subject": "Mining",    # partial match on subject label
+    "date_from": "2023-01-01",
+    "limit": 20,
+}
+
+response = requests.get(
+    f"{BASE_URL}/lobbying/communications",
+    headers=headers,
+    params=params
+)
+data = response.json()
+
+print(f"Total communications on this subject: {data['meta']['total']}")
+print()
+
+for comm in data["data"]:
+    print(f"Client:      {comm['client_org']}")
+    print(f"DPOH:        {comm['dpoh_name']} ({comm['institution']})")
+    print(f"Date:        {comm['communication_date']}")
+    print(f"Subjects:    {', '.join(comm.get('subject_labels', []))}")
+    print("---")
+```
+
+## Get a full client lobbying profile
+
+Pull an aggregated view of a client's lobbying activity — total communications, top institutions, and top subjects.
+
+```python
+# get the lobbying profile for a client organization
+client_name = "Rio Tinto"
+
+response = requests.get(
+    f"{BASE_URL}/clients/{client_name}",
+    headers=headers
+)
+profile = response.json()["data"]
+
+print(f"Client: {profile['client_org']}")
+print(f"Total communications: {profile['total_communications']}")
+print(f"Active registrations: {profile['active_registrations']}")
+
+print("\nTop institutions lobbied:")
+for inst in profile["top_institutions"][:5]:
+    print(f"  {inst['institution']}: {inst['communication_count']} communications")
+
+print("\nTop subjects:")
+for subj in profile["top_subjects"][:5]:
+    print(f"  {subj['subject']}: {subj['count']}")
+```
+
+## Track the lobby → contract sequence
+
+One of the most powerful patterns: check whether an organization lobbied a department before winning a contract from it.
+
+```python
+import requests
+from datetime import datetime
+
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.northaxiumdata.ca/api/v1"
+headers = {"X-API-Key": API_KEY}
+
+company = "Palantir"
+
+# Step 1: get lobbying communications with dates
+lobby_response = requests.get(
+    f"{BASE_URL}/lobbying/communications",
+    headers=headers,
+    params={"client": company, "limit": 50}
+)
+comms = lobby_response.json()["data"]
+
+# Step 2: get contract wins
+contract_response = requests.get(
+    f"{BASE_URL}/contracts",
+    headers=headers,
+    params={"vendor": company, "limit": 50}
+)
+contracts = contract_response.json()["data"]
+
+print(f"Lobbying communications: {len(comms)}")
+print(f"Contract records found:  {len(contracts)}")
+
+# Step 3: look for lobby-before-contract sequences by department
+lobbied_depts = set()
+for comm in comms:
+    if comm.get("institution"):
+        lobbied_depts.add(comm["institution"].lower())
+
+print("\nContracts from departments that were previously lobbied:")
+for contract in contracts:
+    dept = (contract.get("department") or "").lower()
+    # check for partial overlap between contract department and lobbied institution
+    for lobbied in lobbied_depts:
+        if any(word in lobbied for word in dept.split("|")[0].strip().split()):
+            print(f"  {contract['vendor']} — ${contract['value']:,.0f} from {contract['department']} on {contract['event_date']}")
+            break
+```
+
+## Search active registrations by institution
+
+Find all organizations currently registered to lobby a specific federal institution.
+
+```python
+params = {
+    "institution": "Department of Finance",
+    "active": "true",
+    "limit": 20,
+}
+
+response = requests.get(
+    f"{BASE_URL}/lobbying/registrations",
+    headers=headers,
+    params=params
+)
+data = response.json()
+
+print(f"Active registrations targeting this institution: {data['meta']['total']}")
+for reg in data["data"]:
+    print(f"  {reg['client_org_name']} — {reg['subject_labels']} (since {reg['effective_date']})")
+```
+
+## What's happening here
+
+**`subject` parameter on communications** — partial match on LobbyCan subject matter labels such as `Mining`, `Environment`, `International Trade`, `Taxation`, `Health`. Check the LobbyCan registry for the full label taxonomy.
+
+**`client` parameter** — partial match on client organization name. `"Rio Tinto"` matches `Rio Tinto plc`, `Rio Tinto Canada Inc`, and similar variants.
+
+**`active` parameter on registrations** — `true` returns only registrations with a current `end_date`; `false` returns only expired ones. Omit to get both.
+
+**Lobby → contract pattern** — LobbyCan communication dates and CanadaBuys contract dates are both ISO 8601. Sorting by date and comparing department names surfaces potential lobby-to-contract sequences. For the most accurate matching, use the department profile endpoint to align institution names with department names precisely.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Lobbying Communications Reference" icon="comments" href="/api-reference/lobbying/communications">
+    Full parameter reference for the communications endpoint
+  </Card>
+  <Card title="Client & Lobbyist Profiles" icon="user" href="/api-reference/lobbying/profiles">
+    Aggregated lobbying profiles for clients and individuals
+  </Card>
+  <Card title="Search Federal Contracts" icon="file-contract" href="/guides/search-contracts">
+    Cross-reference lobbying with contract wins
+  </Card>
+  <Card title="MCP Server" icon="robot" href="/mcp">
+    Ask Claude to do this analysis in natural language
+  </Card>
+</CardGroup>

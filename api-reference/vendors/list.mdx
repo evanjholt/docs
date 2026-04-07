@@ -1,6 +1,82 @@
 ---
 title: "Browse Vendors"
-description: "All contract vendors ranked by total value"
+description: "Browse all federal contract vendors ranked by total contract value."
+api: "GET https://api.northaxiumdata.ca/api/v1/vendors"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns a ranked list of distinct vendor name strings from the contracts dataset. Use this to find the exact source string for a vendor before calling [Vendor Profile](/api-reference/vendors/profile).
+
+**Pattern:** `search vendors` → `get vendor profile`
+
+## Query Parameters
+
+<ParamField query="q" type="string">
+  Partial match on vendor name (case-insensitive)
+</ParamField>
+
+<ParamField query="sort_by" type="string">
+  Sort order. Options: `total_value`, `contract_count`. Default: `total_value`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Max results. Default: `100`. Max: `200`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/vendors?q=Palantir"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/vendors",
+    headers=headers,
+    params={"q": "Palantir"}
+)
+vendors = response.json()["data"]
+for v in vendors:
+    print(f"{v['vendor']}: ${v['total_value']:,.0f} across {v['contract_count']} contracts")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "vendor": "Palantir Technologies Canada Inc",
+      "total_value": 23840000.00,
+      "contract_count": 14
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "limit": 100,
+    "offset": 0
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

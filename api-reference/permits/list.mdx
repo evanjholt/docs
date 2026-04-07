@@ -1,6 +1,127 @@
 ---
 title: "Building Permits"
-description: "Building permits across 17 Canadian municipalities"
+api: "GET /permits/list"
+description: "Retrieve a list of commercial, residential, and industrial building permits issued across Canada."
 ---
 
-*Coming soon.*
+Get a standardized list of building permits aggregated from municipalities, filterable by city, year, and value.
+
+### Query Parameters
+
+<ParamField query="limit" type="integer" default="100">
+  Maximum number of permits to return. Maximum limits map to your plan (100 for Basic, 1,000 for Pro, 10,000 for Enterprise).
+</ParamField>
+
+<ParamField query="offset" type="integer" default="0">
+  Number of records to skip for pagination.
+</ParamField>
+
+<ParamField query="city" type="string">
+  Filter permits by issuing municipality.
+</ParamField>
+
+<ParamField query="year" type="integer">
+  Filter by the year the permit was issued (e.g., `2023`).
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/v1/permits/list?limit=10&city=Toronto" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/v1/permits/list"
+headers = {"X-API-Key": "<your-api-key>"}
+params = {
+    "limit": 10,
+    "city": "Toronto"
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+const url = new URL('https://api.northaxiumdata.ca/v1/permits/list');
+url.search = new URLSearchParams({
+  limit: '10',
+  city: 'Toronto'
+});
+
+fetch(url, {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": [
+    {
+      "permit_id": "BP-2023-88123",
+      "city": "Toronto",
+      "province": "ON",
+      "issue_date": "2023-05-15",
+      "permit_type": "Commercial",
+      "value": 4500000.00,
+      "description": "New construction of office building"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid parameter value."
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "The requested resource was not found."
+  }
+}
+```
+
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded."
+  }
+}
+```
+
+</ResponseExample>

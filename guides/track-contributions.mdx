@@ -1,6 +1,173 @@
 ---
 title: "How to Track Political Contributions"
-description: "A step-by-step Python guide to querying Elections Canada contribution data with the NorthAxium Data API."
+description: "Query 6.2M+ Elections Canada reviewed contributions to track political financing by party, contributor, province, and election cycle."
 ---
 
-*Coming soon.*
+The NorthAxium Data contributions API exposes the full Elections Canada reviewed contributions dataset — 6.2M+ records covering contributions to parties, candidates, electoral district associations, leadership contestants, and nomination contestants from 2000 to present.
+
+## Prerequisites
+
+- A NorthAxium Data API key ([get one here](https://northaxiumdata.ca) or use the [free demo key](/authentication))
+- Python 3.8+ with the `requests` library installed (`pip install requests`)
+
+## Search contributions by party and year
+
+The most common starting point — aggregate contributions to a party in a given election year.
+
+```python
+import requests
+
+API_KEY = "your_api_key_here"
+BASE_URL = "https://api.northaxiumdata.ca/api/v1"
+headers = {"X-API-Key": API_KEY}
+
+# get contributions to a party in a specific year
+params = {
+    "party": "Conservative",    # partial match on party name
+    "year": 2021,
+    "limit": 20,
+}
+
+response = requests.get(
+    f"{BASE_URL}/contributions",
+    headers=headers,
+    params=params
+)
+data = response.json()
+
+print(f"Total contributions matching filter: {data['meta']['total']}")
+print()
+
+for c in data["data"]:
+    print(f"Contributor:  {c['contributor_name']} ({c.get('contributor_province', 'N/A')})")
+    print(f"Party:        {c['political_party']}")
+    print(f"Amount:       ${c['monetary_amount']:,.2f}")
+    print(f"Type:         {c['contributor_type']}")
+    print("---")
+```
+
+## Get party-level contribution statistics
+
+Aggregate total contributions and donor counts by party across a full election cycle.
+
+```python
+params = {
+    "group_by": "party",
+    "sum_field": "monetary_amount",
+}
+
+response = requests.get(
+    f"{BASE_URL}/contributions/stats",
+    headers=headers,
+    params=params
+)
+stats = response.json()["data"]
+
+print("Contributions by party (all time):")
+for row in stats[:8]:
+    print(f"  {row['party']}: ${row['total']:,.0f} from {row['count']:,} contributions")
+```
+
+## Track a contributor's full donation history
+
+Look up how much a named individual or organization has contributed and to which parties.
+
+```python
+# search for a contributor by name
+contributor = "Pierre Poilievre"
+
+response = requests.get(
+    f"{BASE_URL}/contributors/{contributor}",
+    headers=headers
+)
+profile = response.json()["data"]
+
+print(f"Contributor: {profile['contributor_name']}")
+print(f"Total donated: ${profile['total_amount']:,.2f} across {profile['contribution_count']} contributions")
+
+print("\nBy party:")
+for row in profile["party_breakdown"]:
+    print(f"  {row['party']}: ${row['total']:,.2f} ({row['count']} contributions)")
+
+print("\nBy year:")
+for row in profile["year_breakdown"]:
+    print(f"  {row['year']}: ${row['total']:,.2f}")
+```
+
+## Compare contributions by province
+
+Break down contributions to a specific party by province of origin.
+
+```python
+params = {
+    "group_by": "province",
+    "sum_field": "monetary_amount",
+}
+
+response = requests.get(
+    f"{BASE_URL}/contributions/stats",
+    headers=headers,
+    params=params
+)
+stats = response.json()["data"]
+
+print("Contributions by province (all parties, all time):")
+for row in stats:
+    if row.get("province"):
+        print(f"  {row['province']}: ${row['total']:,.0f} from {row['count']:,} contributions")
+```
+
+## Filter by contributor type
+
+Elections Canada tracks several contributor types. Filter to corporate contributions to identify organizational donors.
+
+```python
+# contributor_type options: Individuals, Corporations, 
+# Businesses / Commercial organizations, Unincorporated organizations or associations
+params = {
+    "contributor_type": "Corporations",
+    "year": 2019,
+    "min_amount": 1000,
+    "limit": 20,
+}
+
+response = requests.get(
+    f"{BASE_URL}/contributions",
+    headers=headers,
+    params=params
+)
+data = response.json()
+
+print(f"Corporate contributions over $1,000 in 2019: {data['meta']['total']}")
+for c in data["data"]:
+    print(f"  {c['contributor_name']} → {c['political_party']}: ${c['monetary_amount']:,.2f}")
+```
+
+## What's happening here
+
+**`party` parameter** — partial match. `"Liberal"` matches `Liberal Party of Canada`, `Alberta Liberal Party`, and similar. For a precise match, use the full party name string from the stats endpoint.
+
+**`contributor_type`** — exact match on Elections Canada's classification. The most common values are `Individuals` (by far the largest group at ~99% of records) and `Corporations`. Use the stats endpoint grouped by `contributor_type` to see the full breakdown.
+
+**`electoral_event`** — exact match on the Elections Canada event label, e.g. `44th General Election`, `43rd General Election`. Use this to isolate contributions within a specific election campaign rather than a calendar year.
+
+**Contributor profiles** — the profile endpoint uses partial name matching. For common names, you may get multiple contributors in the result. The `year_breakdown` in the profile is useful for understanding whether a contributor's giving pattern changed around a specific election.
+
+**Data coverage note** — Elections Canada publishes reviewed contributions on a per-election cycle basis. The most recent election cycle may not yet be reviewed and published. Check the [Coverage](/data-coverage) page for the current data state.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Contributions API Reference" icon="circle-dollar-to-slot" href="/api-reference/contributions/list">
+    Full parameter reference for the contributions endpoint
+  </Card>
+  <Card title="Contributor Profiles" icon="user" href="/api-reference/contributions/profiles">
+    Aggregated contribution history for any named contributor
+  </Card>
+  <Card title="Find Lobbying Activity" icon="comments" href="/guides/find-lobbying-activity">
+    Cross-reference donors with lobbying records
+  </Card>
+  <Card title="MCP Server" icon="robot" href="/mcp">
+    Ask Claude to analyse contributions in natural language
+  </Card>
+</CardGroup>

@@ -1,6 +1,123 @@
 ---
 title: "Research Grants"
-description: "NSERC and SSHRC research award records"
+description: "NSERC and SSHRC academic research awards spanning 1991 to present."
+api: "GET https://api.northaxiumdata.ca/api/v1/research_grants"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns 921K+ research grant records from the Natural Sciences and Engineering Research Council (NSERC) and Social Sciences and Humanities Research Council (SSHRC). NSERC covers 1991–present; SSHRC covers 1998–present.
+
+## Query Parameters
+
+<ParamField query="q" type="string">
+  Full-text search across researcher name, institution, program name, and keywords
+</ParamField>
+
+<ParamField query="source" type="string">
+  Filter by council. Options: `NSERC`, `SSHRC`
+</ParamField>
+
+<ParamField query="researcher_name" type="string">
+  Partial match on researcher name
+</ParamField>
+
+<ParamField query="institution" type="string">
+  Partial match on institution name
+</ParamField>
+
+<ParamField query="province" type="string">
+  Two-letter province code — e.g. `ON`, `BC`, `QC`
+</ParamField>
+
+<ParamField query="fiscal_year" type="string">
+  Fiscal year — e.g. `2022-23`
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum award amount in CAD
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum award amount in CAD
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Results per page. Default: `100`. Max: `200`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/research_grants?institution=University%20of%20Toronto&source=NSERC&limit=10"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+params = {
+    "institution": "University of Toronto",
+    "source": "NSERC",
+    "limit": 10
+}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/research_grants",
+    headers=headers,
+    params=params
+)
+for grant in response.json()["data"]:
+    print(f"{grant['researcher_name']} — {grant['program_en']}: ${grant['award_amount']:,.0f}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "record_id": "nserc_abc123",
+      "researcher_name": "Dr. Jane Smith",
+      "institution": "University of Toronto",
+      "province_en": "Ontario",
+      "award_amount": 185000.00,
+      "fiscal_year": "2022-23",
+      "program_en": "Discovery Grants Program",
+      "source": "NSERC",
+      "keywords": "machine learning, climate modelling"
+    }
+  ],
+  "meta": {
+    "total": 921586,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "Invalid source value. Must be one of: NSERC, SSHRC."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

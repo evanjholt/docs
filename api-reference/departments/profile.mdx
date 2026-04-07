@@ -1,6 +1,84 @@
 ---
 title: "Department Profile"
-description: "Aggregated procurement profile for a named department"
+description: "Aggregated procurement profile for a federal department."
+api: "GET https://api.northaxiumdata.ca/api/v1/departments/{name}"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns an aggregated procurement profile for a federal department — total spend, top vendors, event type breakdown, and recent contracts.
+
+## Path Parameters
+
+<ParamField path="name" type="string" required>
+  Exact department name string — e.g. `National Defence | Défense nationale`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/departments/National%20Defence%20%7C%20D%C3%A9fense%20nationale"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+dept = "National Defence | Défense nationale"
+
+response = requests.get(
+    f"https://api.northaxiumdata.ca/api/v1/departments/{dept}",
+    headers=headers
+)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": {
+    "department": "National Defence | Défense nationale",
+    "total_value": 4821034521.00,
+    "contract_count": 18432,
+    "top_vendors": [
+      {
+        "vendor": "Lockheed Martin Canada Inc",
+        "total_value": 980000000.00,
+        "contract_count": 124
+      }
+    ],
+    "event_type_breakdown": {
+      "contract": 15200,
+      "award": 2100,
+      "tender": 1132
+    }
+  }
+}
+```
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "No department profile found. Use /api/v1/departments?q=... to find the exact name."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

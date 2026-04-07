@@ -1,7 +1,9 @@
 ---
-title: Data Coverage
-description: What data is available, record counts, sources, and known constraints.
+title: "Coverage"
+description: "Record counts, update frequencies, city coverage, and known data constraints."
 ---
+
+All record counts reflect the live Railway database. For source methodology, see [Data Sources](/data-sources).
 
 ## Datasets
 
@@ -17,7 +19,7 @@ description: What data is available, record counts, sources, and known constrain
 | Political Contributions | 6,204,260 | Per election | Elections Canada (reviewed) |
 | Parliamentary Bills | 446 | Per session | OpenParliament |
 | Politicians | 14,299 | Per election | OpenParliament |
-| Building Permits | 2,511,023 | Daily–Weekly | 17 municipalities |
+| Building Permits | 2,511,023 | Daily – Weekly | 17 municipalities |
 
 ## Building permits — city coverage
 
@@ -44,22 +46,29 @@ description: What data is available, record counts, sources, and known constrain
 ## Known constraints
 
 <AccordionGroup>
+
   <Accordion title="Grant recipient name fragmentation">
-    Federal grants recipient names are source-fragmented. The same institution may appear under multiple English, French, or bilingual strings in the TBS source. Use `/api/v1/grants/recipients?q=...` to see all matching strings before profiling a recipient.
+    Federal grants recipient names are source-fragmented. The same institution may appear under multiple English, French, or bilingual strings in the TBS source. Use `/api/v1/grants/recipients?q=...` to browse matching strings before profiling a recipient.
   </Accordion>
+
   <Accordion title="Lobbying lobbyist name coverage">
     Event-level `lobbyist_name` is sparse at source (~2–3%). The API falls back through the matching registration row, raising effective coverage to ~90%. The MCP tool reflects the same fallback.
   </Accordion>
+
   <Accordion title="Ottawa permits geometry">
     Ottawa permit geometry is approximately 60% due to inconsistent source address strings. This is a source-data quality constraint, not an ingestion issue.
   </Accordion>
+
   <Accordion title="Victoria permits — rolling feed only">
-    Victoria publishes only a rolling 365-day permit feed. No historical Victoria permit data is available from the source.
+    Victoria publishes only a rolling 365-day permit feed. No historical Victoria permit data is available from the source. This is a permanent constraint of the publisher's open data portal.
   </Accordion>
+
   <Accordion title="Procurement category filter">
-    The `/contracts` category filter is not yet available. The source `commodity_type` field uses internal codes (`S`, `G`, `C`) rather than a public taxonomy.
+    The `/contracts` category filter is not yet available. The source `commodity_type` field stores internal codes (`S`, `G`, `C`) rather than a public-facing taxonomy.
   </Accordion>
+
   <Accordion title="Parliamentary data lag">
-    Parliamentary data (committee memberships, current MPs) reflects the OpenParliament snapshot at ingestion time and may lag live Parliament by days to weeks.
+    Parliamentary data reflects the OpenParliament snapshot at ingestion time and may lag the live House of Commons by days to weeks during active sessions.
   </Accordion>
+
 </AccordionGroup>

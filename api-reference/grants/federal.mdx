@@ -1,6 +1,108 @@
 ---
 title: "Federal Grants"
-description: "TBS proactive disclosure grants and contributions"
+description: "TBS proactive disclosure grants and contributions from open.canada.ca."
+api: "GET https://api.northaxiumdata.ca/api/v1/grants"
+authMethod: "key"
 ---
 
-*Coming soon.*
+## Overview
+
+Returns paginated federal grant records from the Treasury Board of Canada Secretariat Proactive Disclosure dataset — 1.28M+ grants covering agreements to organizations and individuals across all federal departments.
+
+<Tip>
+  Recipient names are source-fragmented. The same institution may appear under multiple name strings. Use [Grant Recipients](/api-reference/grants/recipients) to browse and resolve the exact string before profiling a recipient.
+</Tip>
+
+## Query Parameters
+
+<ParamField query="recipient" type="string">
+  Partial match on recipient name
+</ParamField>
+
+<ParamField query="department" type="string">
+  Partial match on granting department name
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum grant value in CAD
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum grant value in CAD
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  ISO 8601 start date
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  ISO 8601 end date
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Results per page. Default: `50`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Pagination offset. Default: `0`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/grants?recipient=University%20of%20Toronto&limit=10"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+params = {"recipient": "University of Toronto", "limit": 10}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/grants",
+    headers=headers,
+    params=params
+)
+for grant in response.json()["data"]:
+    print(f"{grant['recipient']}: ${grant['value']:,.0f}")
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "record_id": "grant_abc123",
+      "recipient": "University of Toronto",
+      "department": "Natural Sciences and Engineering Research Council of Canada",
+      "value": 250000.00,
+      "event_date": "2023-04-01",
+      "source_dataset": "open.canada grants and contributions"
+    }
+  ],
+  "meta": {
+    "total": 1276865,
+    "limit": 10,
+    "offset": 0
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

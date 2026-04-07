@@ -1,60 +1,41 @@
 ---
-title: Introduction
-description: Canada's Government Data API — procurement, lobbying, grants, contributions, parliamentary data, and building permits in one unified platform.
+title: "Introduction"
+description: "Canadian government data infrastructure for developers and AI agents."
 ---
 
-NorthAxium Data is a REST API that aggregates Canadian federal and municipal government data into a single normalized, queryable platform.
+NorthAxium Data provides structured Canadian government data through a clean, predictable REST API. We ingest directly from federal and municipal primary sources — CanadaBuys, Elections Canada, LobbyCan, NSERC, SSHRC, OpenParliament, and 17 municipal permit portals — with no third-party data vendors in the chain.
 
-## What's in the API
+## What You Can Access
 
-| Domain | Records | Source |
-|---|---|---|
-| Federal Contracts | 1.3M+ | CanadaBuys / TBS |
-| Federal Grants | 1.28M+ | TBS Proactive Disclosure |
-| Research Grants | 921K+ | NSERC + SSHRC |
-| Infrastructure Projects | 20K+ | Infrastructure Canada |
-| Lobbying Registrations | 166K+ | LobbyCan |
-| Lobbying Communications | 354K+ | LobbyCan |
-| Political Contributions | 6.2M+ | Elections Canada |
-| Parliamentary Bills | 446 | OpenParliament |
-| Politicians | 14K+ | OpenParliament |
-| Building Permits | 2.5M+ | 17 municipalities |
+We cover **11 datasets and 2.5M+ building permits** across federal procurement, lobbying, political financing, parliamentary activity, and municipal construction. Core datasets include:
 
-## Base URL
+- **[Federal Contracts](/api-reference/contracts/list)** — 1.3M+ procurement records from CanadaBuys and TBS Proactive Disclosure
+- **[Federal Grants](/api-reference/grants/federal)** — 1.28M+ grants from TBS open data, updated quarterly
+- **[Research Grants](/api-reference/grants/research)** — 921K+ NSERC and SSHRC awards spanning 1991 to present
+- **[Infrastructure Projects](/api-reference/grants/infrastructure)** — 20K+ Infrastructure Canada funded projects with bilingual fields
+- **[Lobbying Registrations](/api-reference/lobbying/registrations)** — 166K+ registrations from the LobbyCan registry
+- **[Lobbying Communications](/api-reference/lobbying/communications)** — 354K+ communications between lobbyists and federal officials
+- **[Political Contributions](/api-reference/contributions/list)** — 6.2M+ reviewed contributions from Elections Canada
+- **[Parliamentary Bills](/api-reference/parliamentary/bills)** — bills, readings, votes, and sector tags from OpenParliament
+- **[Politicians](/api-reference/parliamentary/politicians)** — current and historical MPs with lobbying interaction records
+- **[Building Permits](/api-reference/permits/list)** — 2.5M+ permits across 17 Canadian municipalities with proximity search
 
-```
-https://api.northaxiumdata.ca
-```
+If you need to trace money, lobbying activity, and contract wins back to a single organization — you can do it from the same system.
 
-## Authentication
+## Built For
 
-All `/api/v1/*` endpoints require an API key passed in the `X-API-Key` header.
+- AI agents and LLM pipelines querying Canadian government activity
+- Investigative journalists and researchers tracking procurement and lobbying
+- Government BD teams monitoring competitor contract wins and departmental spend
+- Policy analysts tracking legislative exposure by sector
+- Civic tech builders and open data developers
 
-```bash
-curl -H "X-API-Key: YOUR_API_KEY" \
-  https://api.northaxiumdata.ca/api/v1/contracts?limit=5
-```
+## Design Principles
 
-<Card title="Get your API key" icon="key" href="/authentication">
-  Learn how to authenticate and get started in minutes.
-</Card>
+- **Primary-source ingestion** — data pulled directly from official government open data APIs and registries; no intermediaries
+- **Consistent JSON envelopes** — every list endpoint returns the same `data` + `meta` shape; every error returns `error.code` + `error.message`
+- **Unified platform** — one API key covers all 11 datasets; no fragmented products or separate subscriptions
+- **AI-native** — the MCP server lets Claude and other AI agents query the data in natural language without writing API calls
+- **Weekly refresh** — procurement, lobbying, and permit data refreshed from source on a weekly cycle
 
-## Try it now
-
-Use the free demo key to make your first request — no sign-up required:
-
-```bash
-curl -H "X-API-Key: 3ZNJzfM7MAqdMabhbiGuCDuq" \
-  https://api.northaxiumdata.ca/api/v1/contracts?limit=3
-```
-
-<Note>
-  This demo key is also shown on the [Authentication](/authentication) page.
-</Note>
-
-## What makes NorthAxium Data different
-
-- **Unified platform** — one API key, one schema, one integration covers everything
-- **Parliamentary data** — bills, politicians, committee memberships, lobbying interactions with named officials
-- **AI-native** — MCP server lets Claude and other AI agents query the data directly in natural language
-- **Direct billing** — no RapidAPI middleman, direct Stripe subscription
+Ready to start? Head to the [Quick Start](/quickstart) guide.
