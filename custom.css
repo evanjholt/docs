@@ -6,12 +6,28 @@ button[data-testid="try-it-button"] {
   color: #ffffff !important;
 }
 
+.tryit-button svg,
+button[aria-label="Try it"] svg,
+button[data-testid="try-it-button"] svg {
+  background-color: #ffffff !important;
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
 /* Dark mode overrides for the Try It button */
 .dark .tryit-button,
 .dark button[aria-label="Try it"],
 .dark button[data-testid="try-it-button"] {
   background-color: #f2faec !important;
   color: #1d1d19 !important;
+}
+
+.dark .tryit-button svg,
+.dark button[aria-label="Try it"] svg,
+.dark button[data-testid="try-it-button"] svg {
+  background-color: #1d1d19 !important;
+  color: #1d1d19 !important;
+  fill: #1d1d19 !important;
 }
 
 /* Force CSS Variables just in case */
