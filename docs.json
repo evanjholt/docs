@@ -2,10 +2,6 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NorthAxium Data",
-  "logo": {
-    "light": "/logo/mark.svg",
-    "dark": "/logo/mark.svg"
-  },
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#1d1b16",
@@ -30,45 +26,23 @@
     }
   },
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Overview",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "authentication"
-            ]
-          },
-          {
-            "group": "Platform",
-            "pages": [
-              "data-sources",
-              "data-coverage",
-              "openapi-spec",
-              "support"
-            ]
-          }
+        "group": "Overview",
+        "pages": [
+          "introduction",
+          "quickstart",
+          "authentication",
+          "data-sources",
+          "data-coverage",
+          "mcp",
+          "openapi-spec",
+          "support"
         ]
       },
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Guides",
-            "pages": [
-              "guides/search-contracts",
-              "guides/find-lobbying-activity",
-              "guides/track-contributions"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
+        "group": "APIs",
+        "pages": [
           {
             "group": "Contracts",
             "icon": "file-contract",
@@ -148,15 +122,11 @@
         ]
       },
       {
-        "tab": "MCP Server",
-        "groups": [
-          {
-            "group": "MCP Server",
-            "icon": "robot",
-            "pages": [
-              "mcp"
-            ]
-          }
+        "group": "Guides",
+        "pages": [
+          "guides/search-contracts",
+          "guides/find-lobbying-activity",
+          "guides/track-contributions"
         ]
       }
     ]
