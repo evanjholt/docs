@@ -12,6 +12,9 @@
     "light": "#38352d",
     "dark": "#1d1d19"
   },
+  "custom": {
+    "css": "/custom.css"
+  },
   "background": {
     "light": "#f2faec",
     "dark": "#1d1d19"
