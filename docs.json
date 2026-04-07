@@ -2,6 +2,10 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NorthAxium Data",
+  "logo": {
+    "light": "/logo/TransparentFullLogo.png",
+    "dark": "/logo/DarkModeTransparentFullLogo.png"
+  },
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#1d1b16",
@@ -16,7 +20,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://northaxiumdata.ca/support"
+        "href": "/support"
       }
     ],
     "primary": {
