@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "NorthAxium Data",
   "logo": {
     "light": "/logo/TransparentFullLogo.png",
@@ -13,8 +13,8 @@
     "dark": "#18E299"
   },
   "background": {
-    "light": "#f8f6f1",
-    "dark": "#14120c"
+    "light": "#f2faec",
+    "dark": "#1d1d19"
   },
   "navbar": {
     "links": [
