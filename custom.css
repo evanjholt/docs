@@ -37,15 +37,16 @@ button[data-testid="try-it-button"] svg {
 }
 
 /* --- GET Method Pills --- */
-/* Force greyscale (overrides the lime green bg-[#2AB673]) */
-:not(.tryit-button).bg-\[\#2AB673\] {
-  background-color: #e5e7eb !important; /* Light grey */
-  color: #111827 !important; /* Dark grey/black */
+/* Target Mintlify's specific GET method tailwind classes */
+.bg-green-400\/20,
+.dark\:bg-green-400\/20 {
+  background-color: rgb(214, 214, 211) !important; /* #D6D6D3 based on user request */
 }
 
-.dark :not(.tryit-button).bg-\[\#2AB673\] {
-  background-color: #4b5563 !important; /* Mid-dark grey */
-  color: #f9fafb !important; /* Off-white */
+/* Black text for the GET method, overriding default green text */
+.text-green-700,
+.dark\:text-green-400 {
+  color: #000000 !important; /* Black */
 }
 
 /* --- Path Parameters {name} tags --- */
