@@ -3,4 +3,183 @@ title: "MCP Server"
 description: "Connect Claude and other AI agents directly to NorthAxium Data via the Model Context Protocol."
 ---
 
-*Coming soon.*
+Your AI assistant can use the NorthAxium Data MCP server to query Canadian government data in natural language — contracts, lobbying, grants, contributions, parliamentary activity, and building permits — without writing a single API call.
+
+## Overview
+
+The MCP (Model Context Protocol) server exposes 15 tools across 6 domains. Once connected, your AI assistant handles the reasoning while NorthAxium Data supplies the ground truth from primary government sources.
+
+There is currently one way to connect:
+
+- **Claude Desktop (stdio)** — runs locally using your Developer or Pro API key; available on Developer and Pro plans
+
+<Note>
+  **Hosted SSE transport** (for Claude.ai web and always-on agent frameworks) is coming for Pro tier. The stdio setup below works today with Claude Desktop.
+</Note>
+
+## Getting Started
+
+MCP access requires a Developer or Pro plan. [Sign up at northaxiumdata.ca](https://northaxiumdata.ca) to get your API key.
+
+<Tabs>
+  <Tab title="Claude Desktop">
+
+### Prerequisites
+
+- [Claude Desktop](https://claude.ai/download) installed (Mac or Windows)
+- A Developer or Pro API key
+- Python 3.11+ installed locally
+- Git
+
+### 1. Clone the server repo
+
+```bash
+git clone https://github.com/evanjholt/NorthAxiumData.git
+cd NorthAxiumData
+pip install -r requirements.txt
+```
+
+### 2. Configure your environment
+
+Create a `.env` file in the repo root with your database connection details:
+
+```bash
+NA_PG_HOST=postgis.railway.internal
+NA_PG_PORT=5432
+NA_PG_DB=railway
+NA_PG_USER=postgres
+NA_PG_PASSWORD=your_password_here
+```
+
+<Note>
+  Contact [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca) to receive your hosted database credentials.
+</Note>
+
+### 3. Add to Claude Desktop config
+
+Open your Claude Desktop configuration file:
+
+- **Mac:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add the NorthAxium Data server entry:
+
+```json
+{
+  "mcpServers": {
+    "northaxium-data": {
+      "command": "python3",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "/absolute/path/to/NorthAxiumData"
+    }
+  }
+}
+```
+
+Replace `/absolute/path/to/NorthAxiumData` with the full path to the cloned repo on your machine.
+
+### 4. Restart Claude Desktop
+
+Quit Claude Desktop completely — do not just close the window — and relaunch it. The `northaxium-data` server should appear in the tools panel.
+
+### Troubleshooting
+
+**Tools not appearing** — make sure you fully quit and relaunched Claude Desktop. A window close is not a restart.
+
+**Database connection error** — verify the `.env` file is in the repo root and all `NA_PG_*` values are set. Run `python3 -c "import dotenv; dotenv.load_dotenv(); import os; print(os.getenv('NA_PG_HOST'))"` to confirm the env loads correctly.
+
+**Import errors** — run `pip install -r requirements.txt` again from inside the repo directory.
+
+  </Tab>
+  <Tab title="Cursor">
+
+Cursor support via stdio is available using the same setup as Claude Desktop. Add the following to your Cursor MCP config:
+
+```json
+{
+  "mcpServers": {
+    "northaxium-data": {
+      "command": "python3",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "/absolute/path/to/NorthAxiumData"
+    }
+  }
+}
+```
+
+Follow the same prerequisites and environment setup from the Claude Desktop tab.
+
+  </Tab>
+  <Tab title="Other Clients">
+
+Any MCP-compatible client that supports stdio transport can connect to the NorthAxium Data server using the same command and args pattern. The server is a standard Python MCP stdio server built with the Anthropic `mcp` SDK.
+
+**Hosted SSE transport** (for web-based and always-on clients) is coming for Pro tier. [Contact support](mailto:support@northaxiumdata.ca) to be notified when it launches.
+
+  </Tab>
+</Tabs>
+
+## MCP Tools
+
+Once connected, your AI assistant has access to 15 tools across 6 domains.
+
+**Procurement**
+
+- **`search_contracts`** — Search federal contracts by vendor, department, value range, and date. Returns paginated contract records from CanadaBuys and TBS.
+- **`search_vendors`** — Browse distinct vendor name strings to resolve ambiguous vendor names before profiling. Use before `get_vendor_profile`.
+- **`get_vendor_profile`** — Aggregated procurement profile for a named vendor: total contract value, top departments, contract count, and recent awards.
+- **`get_department_profile`** — Aggregated procurement profile for a federal department: total spend, top vendors, and event type breakdown.
+
+**Grants**
+
+- **`search_grants`** — Search across three grant datasets. Specify `dataset`: `federal_grants` (TBS), `research_grants` (NSERC/SSHRC), or `infrastructure_projects` (Infrastructure Canada).
+- **`search_grant_recipients`** — Browse distinct recipient name strings to resolve ambiguous institution names before profiling. Use before `get_grant_recipient_profile`.
+- **`get_grant_recipient_profile`** — Aggregated grants profile for a recipient: total value received, top funding departments, and recent grants.
+
+**Lobbying**
+
+- **`search_lobbying`** — Search lobbying registrations — what organizations are registered to lobby, on what subjects, and targeting which institutions.
+- **`get_lobbying_communications`** — Search actual communication records: who lobbyists met with, when, and on what subject.
+- **`get_client_profile`** — Aggregated lobbying profile for a client organization: total communication count, top institutions lobbied, and top subject areas.
+
+**Contributions**
+
+- **`search_contributions`** — Search Elections Canada reviewed political contributions by contributor name, party, year, province, and monetary amount.
+
+**Parliamentary**
+
+- **`search_bills`** — Search parliamentary bills by keyword, session, status, sponsor, and sector tag.
+- **`search_politicians`** — Search current and historical MPs. Use to resolve a name to its slug before calling `get_politician_profile`.
+- **`get_politician_profile`** — Full politician profile: election history, committee memberships, lobbying interactions as a designated public office holder (DPOH), and bill sponsorships.
+
+**Permits**
+
+- **`search_permits`** — Search building permits across 17 Canadian municipalities. Supports proximity search by latitude, longitude, and radius in kilometres.
+
+## Authentication
+
+The MCP server authenticates using your NorthAxium Data API key. The key is read from the `.env` file in the repo root at server startup — it is never sent over the network directly by the MCP layer.
+
+MCP access is gated by plan:
+
+| Tier | MCP Access |
+|---|---|
+| Free | ❌ |
+| Developer ($29 CAD / mo) | ✅ stdio — Claude Desktop and compatible clients |
+| Pro ($99 CAD / mo) | ✅ stdio + Hosted SSE (coming soon) |
+| Enterprise | ✅ Hosted SSE + priority rate limits |
+
+If you don't have an account, [sign up at northaxiumdata.ca](https://northaxiumdata.ca).
+
+## Example Usage
+
+After connecting, try asking Claude questions like:
+
+- *"What has Palantir lobbied for in Canada?"*
+- *"Who are the top vendors for the Department of National Defence by contract value?"*
+- *"What federal contracts has Shopify won?"*
+- *"Find all new construction permits in Calgary over $1M issued in the last year"*
+- *"Which companies are lobbying most actively on mining and natural resources?"*
+- *"Show me Mark Carney's lobbying interactions as a DPOH before he entered politics"*
+- *"How much has the University of Toronto received in NSERC grants over the last 10 years?"*
+- *"Compare lobbying activity for the top three defence contractors"*
