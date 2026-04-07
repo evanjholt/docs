@@ -75,3 +75,39 @@ div.bg-\[\#2AB673\] {
 .dark .border-\[\#2AB673\]\/30 {
   border-color: rgba(242, 250, 236, 0.3) !important;
 }
+
+/* ========================================= */
+/* CODE BLOCK SYNTAX HIGHLIGHTING OVERRIDES  */
+/* ========================================= */
+
+/* JSON Keys [Gold: rgb(150, 133, 49)] */
+.code-block-background span[style*="#9CDCFE"],
+.code-block-background span[style*="17, 99, 41"] {
+  color: rgb(150, 133, 49) !important;
+}
+
+/* Strings [Rust: rgb(171, 109, 93)] */
+.code-block-background span[style*="#CE9178"],
+.code-block-background span[style*="10, 48, 105"] {
+  color: rgb(171, 109, 93) !important;
+}
+
+/* Numbers [Blue-gray: rgb(68, 120, 136)] */
+.code-block-background span[style*="#B5CEA8"],
+.code-block-background span[style*="5, 80, 174"] {
+  color: rgb(68, 120, 136) !important;
+}
+
+/* Keywords [Green: #0b7050] */
+.code-block-background span[style*="#DCDCAA"],
+.code-block-background span[style*="149, 56, 0"] {
+  color: #0b7050 !important;
+}
+
+/* Blue Highlight (Punctuation/Operators/Functions) [#007af5] */
+.code-block-background span[style*="#D4D4D4"],
+.code-block-background span[style*="31, 35, 40"],
+.code-block-background span[style*="#569CD6"],
+.code-block-background span[style*="#C586C0"] {
+  color: #007af5 !important;
+}
