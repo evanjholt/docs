@@ -5,5 +5,4 @@
 # Draft content
 drafts/
 *.draft.mdx
-TODO.md
-DEV_LOG.md
+internal/
