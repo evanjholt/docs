@@ -37,15 +37,19 @@ button[data-testid="try-it-button"] svg {
 }
 
 /* --- GET Method Pills --- */
-/* Target Mintlify's specific GET method tailwind classes */
+/* Target Mintlify's specific GET method tailwind classes for inactive and active pills */
 .bg-green-400\/20,
-.dark\:bg-green-400\/20 {
+.dark\:bg-green-400\/20,
+span.bg-\[\#2AB673\],
+div.bg-\[\#2AB673\] {
   background-color: rgb(214, 214, 211) !important; /* #D6D6D3 based on user request */
 }
 
-/* Black text for the GET method, overriding default green text */
+/* Black text for the GET method, overriding default green or white text */
 .text-green-700,
-.dark\:text-green-400 {
+.dark\:text-green-400,
+span.bg-\[\#2AB673\],
+div.bg-\[\#2AB673\] {
   color: #000000 !important; /* Black */
 }
 
