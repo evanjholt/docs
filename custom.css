@@ -1,12 +1,7 @@
 /* API Playground "Try It" Button Overrides */
-button.bg-primary,
-button.bg-primary-dark,
-button.bg-primary-light,
-button.bg-green-500,
-button.bg-emerald-500,
-button[class*="play"],
-button[class*="Play"],
-.api-playground-play-button {
+.tryit-button,
+button[aria-label="Try it"],
+button[data-testid="try-it-button"] {
   background-color: #1d1d19 !important;
   color: #ffffff !important;
 }
