@@ -19,20 +19,20 @@
   "navbar": {
     "links": [
       {
-        "label": "northaxiumdata.ca",
-        "href": "https://northaxiumdata.ca"
+        "label": "Support",
+        "href": "https://northaxiumdata.ca/support"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Get API Key",
+      "label": "Dashboard",
       "href": "https://northaxiumdata.ca"
     }
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "API Reference",
+        "tab": "Overview",
         "groups": [
           {
             "group": "Getting Started",
@@ -43,20 +43,105 @@
             ]
           },
           {
-            "group": "Data Coverage",
+            "group": "Platform",
             "pages": [
-              "data-coverage"
+              "data-sources",
+              "data-coverage",
+              "openapi-spec",
+              "support"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/search-contracts",
+              "guides/find-lobbying-activity",
+              "guides/track-contributions"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Contracts",
+            "icon": "file-contract",
+            "pages": [
+              "api-reference/contracts/list",
+              "api-reference/contracts/stats",
+              "api-reference/contracts/disclosures",
+              "api-reference/contracts/lifecycle"
             ]
           },
           {
-            "group": "API Reference",
+            "group": "Vendors",
+            "icon": "building",
             "pages": [
-              "api-reference/contracts",
-              "api-reference/grants",
-              "api-reference/lobbying",
-              "api-reference/contributions",
-              "api-reference/parliamentary",
-              "api-reference/permits",
+              "api-reference/vendors/list",
+              "api-reference/vendors/profile"
+            ]
+          },
+          {
+            "group": "Departments",
+            "icon": "landmark",
+            "pages": [
+              "api-reference/departments/list",
+              "api-reference/departments/profile"
+            ]
+          },
+          {
+            "group": "Grants",
+            "icon": "hand-holding-dollar",
+            "pages": [
+              "api-reference/grants/federal",
+              "api-reference/grants/research",
+              "api-reference/grants/infrastructure",
+              "api-reference/grants/recipients"
+            ]
+          },
+          {
+            "group": "Lobbying",
+            "icon": "comments",
+            "pages": [
+              "api-reference/lobbying/communications",
+              "api-reference/lobbying/registrations",
+              "api-reference/lobbying/profiles"
+            ]
+          },
+          {
+            "group": "Contributions",
+            "icon": "circle-dollar-to-slot",
+            "pages": [
+              "api-reference/contributions/list",
+              "api-reference/contributions/profiles"
+            ]
+          },
+          {
+            "group": "Parliamentary",
+            "icon": "building-columns",
+            "pages": [
+              "api-reference/parliamentary/bills",
+              "api-reference/parliamentary/politicians",
+              "api-reference/parliamentary/committees"
+            ]
+          },
+          {
+            "group": "Permits",
+            "icon": "hammer",
+            "pages": [
+              "api-reference/permits/list"
+            ]
+          },
+          {
+            "group": "Discovery",
+            "icon": "magnifying-glass",
+            "pages": [
               "api-reference/search"
             ]
           }
@@ -67,10 +152,9 @@
         "groups": [
           {
             "group": "MCP Server",
+            "icon": "robot",
             "pages": [
-              "mcp/overview",
-              "mcp/setup",
-              "mcp/tools"
+              "mcp"
             ]
           }
         ]
