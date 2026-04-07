@@ -42,7 +42,7 @@
           "authentication",
           "data-sources",
           "data-coverage",
-          "mcp",
+          "model-context-protocol",
           "openapi-spec",
           "support"
         ]
