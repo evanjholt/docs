@@ -35,3 +35,38 @@ button[data-testid="try-it-button"] svg {
   --colors-primary: #1d1d19 !important;
   --colors-dark: #1d1d19 !important;
 }
+
+/* --- GET Method Pills --- */
+/* Force greyscale (overrides the lime green bg-[#2AB673]) */
+:not(.tryit-button).bg-\[\#2AB673\] {
+  background-color: #e5e7eb !important; /* Light grey */
+  color: #111827 !important; /* Dark grey/black */
+}
+
+.dark :not(.tryit-button).bg-\[\#2AB673\] {
+  background-color: #4b5563 !important; /* Mid-dark grey */
+  color: #f9fafb !important; /* Off-white */
+}
+
+/* --- Path Parameters {name} tags --- */
+/* Light Mode - Brownish grey (#38352d matches your website light palette) */
+.text-\[\#2AB673\] {
+  color: #38352d !important;
+}
+.bg-\[\#2AB673\]\/10 {
+  background-color: rgba(56, 53, 45, 0.1) !important;
+}
+.border-\[\#2AB673\]\/30 {
+  border-color: rgba(56, 53, 45, 0.3) !important;
+}
+
+/* Dark Mode - Cream/#f2faec (matches website light mode background) */
+.dark .text-\[\#2AB673\] {
+  color: #f2faec !important; 
+}
+.dark .bg-\[\#2AB673\]\/10 {
+  background-color: rgba(242, 250, 236, 0.1) !important;
+}
+.dark .border-\[\#2AB673\]\/30 {
+  border-color: rgba(242, 250, 236, 0.3) !important;
+}
