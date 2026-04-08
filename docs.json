@@ -9,15 +9,15 @@
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#1d1d19",
-    "light": "#38352d",
-    "dark": "#1d1d19"
+    "light": "#26231d",
+    "dark": "#ede8df"
   },
   "custom": {
     "css": "/custom.css"
   },
   "background": {
-    "light": "#f2faec",
-    "dark": "#1d1d19"
+    "light": "#f7f6f2",
+    "dark": "#16130f"
   },
   "navbar": {
     "links": [

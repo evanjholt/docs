@@ -1,3 +1,44 @@
+/* --- Global Theme overrides for Background, Surfaces, Text, and Borders --- */
+/* LIGHT MODE */
+html:not(.dark) body, html:not(.dark) .prose {
+  color: #26231d !important;
+}
+html:not(.dark) h1, html:not(.dark) h2, html:not(.dark) h3, html:not(.dark) h4, html:not(.dark) h5, html:not(.dark) h6 {
+  color: #26231d !important;
+}
+html:not(.dark) .text-gray-500, html:not(.dark) .text-gray-600, html:not(.dark) .text-gray-700 {
+  color: #5f5a5299 !important;
+}
+html:not(.dark) .border, html:not(.dark) .border-b, html:not(.dark) .border-t, html:not(.dark) .border-l, html:not(.dark) .border-r, html:not(.dark) hr {
+  border-color: #d9d1c4 !important;
+}
+html:not(.dark) .bg-gray-50, html:not(.dark) .bg-white {
+  background-color: #f1eee8 !important;
+}
+html:not(.dark) .bg-gray-100 {
+  background-color: #e7e2d8 !important;
+}
+
+/* DARK MODE */
+html.dark body, html.dark .prose {
+  color: #ede8df !important;
+}
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6 {
+  color: #ede8df !important;
+}
+html.dark .text-gray-400, html.dark .text-gray-500 {
+  color: #ede8df99 !important;
+}
+html.dark .border, html.dark .border-b, html.dark .border-t, html.dark .border-l, html.dark .border-r, html.dark hr, html.dark .dark\:border-white\/10, html.dark .dark\:border-white\/5 {
+  border-color: #3a352d !important;
+}
+html.dark .bg-gray-800, html.dark .bg-gray-900, html.dark .dark\:bg-gray-800, html.dark .dark\:bg-gray-900, html.dark .dark\:bg-white\/5 {
+  background-color: #1d1a16 !important;
+}
+html.dark .bg-gray-800\/50, html.dark .dark\:bg-gray-800\/50, html.dark .dark\:bg-white\/10 {
+  background-color: #29251f !important;
+}
+
 /* API Playground "Try It" Button Overrides */
 .tryit-button,
 button[aria-label="Try it"],
