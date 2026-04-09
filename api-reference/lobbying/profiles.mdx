@@ -1,6 +1,6 @@
 ---
 title: "Lobbyist Profiles"
-api: "GET /lobbying/profiles/{id}"
+api: "GET /api/v1/lobbying/profiles/{id}"
 description: "Retrieve a detailed profile of a specific registered lobbyist or firm."
 ---
 
@@ -15,14 +15,14 @@ Get comprehensive data on a specific lobbyist, including their registration hist
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/lobbying/profiles/LOB-4592" \
+curl "https://api.northaxiumdata.ca/api/v1/lobbying/profiles/LOB-4592" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/lobbying/profiles/LOB-4592"
+url = "https://api.northaxiumdata.ca/api/v1/lobbying/profiles/LOB-4592"
 headers = {"X-API-Key": "<your-api-key>"}
 
 response = requests.get(url, headers=headers)
@@ -32,7 +32,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-fetch('https://api.northaxiumdata.ca/v1/lobbying/profiles/LOB-4592', {
+fetch('https://api.northaxiumdata.ca/api/v1/lobbying/profiles/LOB-4592', {
   headers: {
     'X-API-Key': '<your-api-key>'
   }

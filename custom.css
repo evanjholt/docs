@@ -1,4 +1,4 @@
-/* API Playground "Try It" Button Overrides */
+/* API playground button overrides */
 .tryit-button,
 button[aria-label="Try it"],
 button[data-testid="try-it-button"] {
@@ -30,87 +30,119 @@ button[data-testid="try-it-button"] svg {
   fill: #1d1d19 !important;
 }
 
-/* Force CSS Variables just in case */
-:root {
-  --colors-primary: #1d1d19 !important;
-  --colors-dark: #1d1d19 !important;
-}
-
-/* --- GET Method Pills --- */
-/* Target Mintlify's specific GET method tailwind classes for inactive and active pills */
-.bg-green-400\/20,
-.dark\:bg-green-400\/20,
-span.bg-\[\#2AB673\],
-div.bg-\[\#2AB673\] {
+/* GET method pill overrides */
+.method-nav-pill>span {
   background-color: rgb(214, 214, 211) !important;
-  /* #D6D6D3 based on user request */
-}
-
-/* Black text for the GET method, overriding default green or white text */
-.text-green-700,
-.dark\:text-green-400,
-span.bg-\[\#2AB673\],
-div.bg-\[\#2AB673\] {
   color: #000000 !important;
-  /* Black */
 }
 
-/* --- Path Parameters {name} tags --- */
-/* Light Mode - Brownish grey (#38352d matches your website light palette) */
+.method-pill {
+  background-color: rgb(214, 214, 211) !important;
+  color: #000000 !important;
+}
+
+.dark .method-pill {
+  background-color: rgb(214, 214, 211) !important;
+  color: #000000 !important;
+}
+
+/* API route path parameter pill overrides */
 .text-\[\#2AB673\] {
-  color: #38352d !important;
+  color: #5f5a53 !important;
 }
 
 .bg-\[\#2AB673\]\/10 {
-  background-color: rgba(56, 53, 45, 0.1) !important;
+  background-color: rgba(95, 90, 83, 0.1) !important;
 }
 
 .border-\[\#2AB673\]\/30 {
-  border-color: rgba(56, 53, 45, 0.3) !important;
+  border-color: rgba(95, 90, 83, 0.3) !important;
 }
 
-/* Dark Mode - Cream/#f2faec (matches website light mode background) */
 .dark .text-\[\#2AB673\] {
-  color: #f2faec !important;
+  color: #5f5a53 !important;
 }
 
 .dark .bg-\[\#2AB673\]\/10 {
-  background-color: rgba(242, 250, 236, 0.1) !important;
+  background-color: rgba(95, 90, 83, 0.1) !important;
 }
 
 .dark .border-\[\#2AB673\]\/30 {
-  border-color: rgba(242, 250, 236, 0.3) !important;
+  border-color: rgba(95, 90, 83, 0.3) !important;
 }
 
-/* ========================================= */
-/* CODE BLOCK SYNTAX HIGHLIGHTING OVERRIDES  */
-/* ========================================= */
+/* Code group background and border overrides */
+.code-group {
+  background-color: #F1EEE8 !important;
+  border-color: #E7E2D8 !important;
+}
 
-/* JSON Keys [Gold: rgb(150, 133, 49)] */
+.code-group [data-component-part="code-block-root"] {
+  background-color: #F1EEE8 !important;
+  border-color: #E7E2D8 !important;
+}
+
+.dark .code-group {
+  background-color: #1D1A16 !important;
+  border-color: #29251F !important;
+}
+
+.dark .code-group [data-component-part="code-block-root"] {
+  background-color: #1D1A16 !important;
+  border-color: #29251F !important;
+}
+
+/* Live API playground response panel overrides */
+[data-testid="api-playground-modal"] div:has(> [aria-label="Response content"]) {
+  background-color: #F1EEE8 !important;
+}
+
+[data-testid="api-playground-modal"] div:has(> div[aria-label="Response content"]) {
+  background-color: #F1EEE8 !important;
+  border-color: #E7E2D8 !important;
+}
+
+[data-testid="api-playground-modal"] div:has(> div > [aria-label="Response content"]) {
+  background-color: #F1EEE8 !important;
+  border-color: #E7E2D8 !important;
+}
+
+.dark [data-testid="api-playground-modal"] div:has(> [aria-label="Response content"]) {
+  background-color: #1D1A16 !important;
+}
+
+.dark [data-testid="api-playground-modal"] div:has(> div[aria-label="Response content"]) {
+  background-color: #1D1A16 !important;
+  border-color: #29251F !important;
+}
+
+.dark [data-testid="api-playground-modal"] div:has(> div > [aria-label="Response content"]) {
+  background-color: #1D1A16 !important;
+  border-color: #29251F !important;
+}
+
+
+/* Code block syntax highlighting overrides */
 .code-block-background span[style*="#9CDCFE"],
 .code-block-background span[style*="17, 99, 41"] {
   color: rgb(150, 133, 49) !important;
 }
 
-/* Strings [Rust: rgb(171, 109, 93)] */
 .code-block-background span[style*="#CE9178"],
 .code-block-background span[style*="10, 48, 105"] {
   color: rgb(171, 109, 93) !important;
 }
 
-/* Numbers [Blue-gray: rgb(68, 120, 136)] */
 .code-block-background span[style*="#B5CEA8"],
 .code-block-background span[style*="5, 80, 174"] {
   color: rgb(68, 120, 136) !important;
 }
 
-/* Keywords [Green: #0b7050] */
 .code-block-background span[style*="#DCDCAA"],
 .code-block-background span[style*="149, 56, 0"] {
   color: #0b7050 !important;
 }
 
-/* Blue Highlight (Functions/Variables) [#007af5] */
 .code-block-background span[style*="#569CD6"],
 .code-block-background span[style*="#C586C0"] {
   color: #007af5 !important;

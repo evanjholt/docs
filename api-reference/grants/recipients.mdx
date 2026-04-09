@@ -1,6 +1,6 @@
 ---
 title: "Grant Recipients"
-api: "GET /grants/recipients"
+api: "GET /api/v1/grants/recipients"
 description: "Retrieve generalized profiles and funding histories for grant recipients."
 ---
 
@@ -27,14 +27,14 @@ Get a list of organizations, municipalities, and institutions that have received
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/grants/recipients?limit=10&province=BC" \
+curl "https://api.northaxiumdata.ca/api/v1/grants/recipients?limit=10&province=BC" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/grants/recipients"
+url = "https://api.northaxiumdata.ca/api/v1/grants/recipients"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/grants/recipients');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/grants/recipients');
 url.search = new URLSearchParams({
   limit: '10',
   province: 'BC'

@@ -1,6 +1,6 @@
 ---
 title: "Universal Search"
-api: "GET /search"
+api: "GET /api/v1/search"
 description: "Search across all federal datasets simultaneously."
 ---
 
@@ -23,14 +23,14 @@ Perform a global text search to find references to a specific company, individua
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/search?query=Green+Energy&limit=5" \
+curl "https://api.northaxiumdata.ca/api/v1/search?query=Green+Energy&limit=5" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/search"
+url = "https://api.northaxiumdata.ca/api/v1/search"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "query": "Green Energy",
@@ -44,7 +44,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/search');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/search');
 url.search = new URLSearchParams({
   query: 'Green Energy',
   limit: '5'

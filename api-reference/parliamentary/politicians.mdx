@@ -1,6 +1,6 @@
 ---
 title: "MPs & Senators"
-api: "GET /parliamentary/politicians"
+api: "GET /api/v1/parliamentary/politicians"
 description: "Retrieve a list of Members of Parliament and Senators."
 ---
 
@@ -27,14 +27,14 @@ Get a standardized list of active and historical federal politicians, their part
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/parliamentary/politicians?limit=10&party=Liberal" \
+curl "https://api.northaxiumdata.ca/api/v1/parliamentary/politicians?limit=10&party=Liberal" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/parliamentary/politicians"
+url = "https://api.northaxiumdata.ca/api/v1/parliamentary/politicians"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/parliamentary/politicians');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/parliamentary/politicians');
 url.search = new URLSearchParams({
   limit: '10',
   party: 'Liberal'

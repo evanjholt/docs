@@ -1,6 +1,6 @@
 ---
 title: "Bills & Legislation"
-api: "GET /parliamentary/bills"
+api: "GET /api/v1/parliamentary/bills"
 description: "Retrieve a list of parliamentary bills and their current legislative status."
 ---
 
@@ -27,14 +27,14 @@ Get a standardized list of bills introduced in the House of Commons and the Sena
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/parliamentary/bills?limit=10&status=Royal+Assent" \
+curl "https://api.northaxiumdata.ca/api/v1/parliamentary/bills?limit=10&status=Royal+Assent" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/parliamentary/bills"
+url = "https://api.northaxiumdata.ca/api/v1/parliamentary/bills"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/parliamentary/bills');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/parliamentary/bills');
 url.search = new URLSearchParams({
   limit: '10',
   status: 'Royal Assent'

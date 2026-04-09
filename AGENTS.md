@@ -1,7 +1,3 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
-
 # Documentation project instructions
 
 ## About this project
@@ -14,20 +10,30 @@
 
 ## Terminology
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+- Use "NorthAxium Data" for the product name
+- Use "dataset" for a data domain such as contracts, grants, or lobbying
+- Use "API key" for authentication credentials
+- Use "MCP server" when referring to the Model Context Protocol integration
+- Use "page" or "documentation page", not "article"
+- Use "endpoint" for REST routes and "tool" for MCP actions
 
 ## Style preferences
-
-{/* Add any project-specific style rules below */}
 
 - Use active voice and second person ("you")
 - Keep sentences concise — one idea per sentence
 - Use sentence case for headings
 - Bold for UI elements: Click **Settings**
 - Code formatting for file names, commands, paths, and code references
+- Prefer root-relative internal links such as `/quickstart`
+- Keep API reference language concrete and operational
+- Favor built-in Mintlify components over custom markup
+- Use `docs.json` for branding, navigation, API config, and theme settings before reaching for `custom.css`
+- Use `custom.css` only for stable Mintlify selectors or documented identifiers
+- Preserve the existing NorthAxium visual identity when doing standards cleanup
+- Avoid undocumented Mintlify config keys unless a current Mintlify release requires them and that use is verified in repo context
 
 ## Content boundaries
 
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+- Document public APIs, guides, authentication, coverage, and MCP setup
+- Do not document internal admin tools or internal-only operational workflows
+- Do not add speculative product claims or roadmap statements unless the page already commits to them

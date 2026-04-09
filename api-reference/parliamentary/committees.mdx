@@ -1,6 +1,6 @@
 ---
 title: "Committees"
-api: "GET /parliamentary/committees"
+api: "GET /api/v1/parliamentary/committees"
 description: "Retrieve a list of House and Senate committees."
 ---
 
@@ -23,14 +23,14 @@ Get a standardized list of standing, special, and legislative committees, includ
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/parliamentary/committees?limit=10&session=44-1" \
+curl "https://api.northaxiumdata.ca/api/v1/parliamentary/committees?limit=10&session=44-1" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/parliamentary/committees"
+url = "https://api.northaxiumdata.ca/api/v1/parliamentary/committees"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -44,7 +44,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/parliamentary/committees');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/parliamentary/committees');
 url.search = new URLSearchParams({
   limit: '10',
   session: '44-1'

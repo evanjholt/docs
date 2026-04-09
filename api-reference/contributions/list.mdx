@@ -1,6 +1,6 @@
 ---
 title: "List Contributions"
-api: "GET /contributions/list"
+api: "GET /api/v1/contributions/list"
 description: "Retrieve a list of political contributions made to federal parties and candidates."
 ---
 
@@ -27,14 +27,14 @@ Get a standardized list of individual and corporate contributions, filterable by
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/contributions/list?limit=10&party=Liberal" \
+curl "https://api.northaxiumdata.ca/api/v1/contributions/list?limit=10&party=Liberal" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/contributions/list"
+url = "https://api.northaxiumdata.ca/api/v1/contributions/list"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/contributions/list');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/contributions/list');
 url.search = new URLSearchParams({
   limit: '10',
   party: 'Liberal'

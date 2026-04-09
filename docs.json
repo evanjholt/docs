@@ -2,22 +2,34 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NorthAxium Data",
+  "description": "Developer documentation for the NorthAxium Data API, guides, and MCP server.",
+  "appearance": {
+    "default": "system"
+  },
   "logo": {
     "light": "/logo/TransparentFullLogo.png",
     "dark": "/logo/DarkModeTransparentFullLogo.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#1d1d19",
-    "light": "#38352d",
-    "dark": "#1d1d19"
-  },
-  "custom": {
-    "css": "/custom.css"
+    "primary": "#26231D",
+    "light": "#EDE8DF",
+    "dark": "#26231D"
   },
   "background": {
-    "light": "#f2faec",
-    "dark": "#1d1d19"
+    "color": {
+      "light": "#F7F6F3",
+      "dark": "#16130F"
+    }
+  },
+  "api": {
+    "mdx": {
+      "server": "https://api.northaxiumdata.ca",
+      "auth": {
+        "method": "key",
+        "name": "X-API-Key"
+      }
+    }
   },
   "navbar": {
     "links": [

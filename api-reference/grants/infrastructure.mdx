@@ -1,6 +1,6 @@
 ---
 title: "Infrastructure Projects"
-api: "GET /grants/infrastructure"
+api: "GET /api/v1/grants/infrastructure"
 description: "Retrieve a list of infrastructure projects funded by the Canadian government."
 ---
 
@@ -27,14 +27,14 @@ Get a standardized list of federal infrastructure funding projects, filterable b
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/grants/infrastructure?limit=10&region=Ontario" \
+curl "https://api.northaxiumdata.ca/api/v1/grants/infrastructure?limit=10&region=Ontario" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/grants/infrastructure"
+url = "https://api.northaxiumdata.ca/api/v1/grants/infrastructure"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/grants/infrastructure');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/grants/infrastructure');
 url.search = new URLSearchParams({
   limit: '10',
   region: 'Ontario'

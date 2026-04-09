@@ -1,6 +1,6 @@
 ---
 title: "Building Permits"
-api: "GET /permits/list"
+api: "GET /api/v1/permits/list"
 description: "Retrieve a list of commercial, residential, and industrial building permits issued across Canada."
 ---
 
@@ -27,14 +27,14 @@ Get a standardized list of building permits aggregated from municipalities, filt
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/permits/list?limit=10&city=Toronto" \
+curl "https://api.northaxiumdata.ca/api/v1/permits/list?limit=10&city=Toronto" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/permits/list"
+url = "https://api.northaxiumdata.ca/api/v1/permits/list"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
@@ -48,7 +48,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/permits/list');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/permits/list');
 url.search = new URLSearchParams({
   limit: '10',
   city: 'Toronto'

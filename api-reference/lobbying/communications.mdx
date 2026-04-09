@@ -1,6 +1,6 @@
 ---
 title: "Communications"
-api: "GET /lobbying/communications"
+api: "GET /api/v1/lobbying/communications"
 description: "Retrieve communication reports filed by registered lobbyists."
 ---
 
@@ -31,14 +31,14 @@ Access records of monthly communication reports describing interactions between 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/v1/lobbying/communications?limit=5&government_institution=Finance" \
+curl "https://api.northaxiumdata.ca/api/v1/lobbying/communications?limit=5&government_institution=Finance" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/v1/lobbying/communications"
+url = "https://api.northaxiumdata.ca/api/v1/lobbying/communications"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 5,
@@ -52,7 +52,7 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/v1/lobbying/communications');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/lobbying/communications');
 url.search = new URLSearchParams({
   limit: '5',
   government_institution: 'Finance'
