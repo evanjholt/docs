@@ -10,7 +10,7 @@
     "light": "/logo/TransparentFullLogo.png",
     "dark": "/logo/DarkModeTransparentFullLogo.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/favicon-rounded.png",
   "colors": {
     "primary": "#26231D",
     "light": "#EDE8DF",
