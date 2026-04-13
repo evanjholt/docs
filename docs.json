@@ -100,7 +100,7 @@
           },
           {
             "group": "Lobbying",
-            "icon": "comments",
+            "icon": "comment-dots",
             "pages": [
               "api-reference/lobbying/communications",
               "api-reference/lobbying/registrations",
@@ -126,7 +126,7 @@
           },
           {
             "group": "Permits",
-            "icon": "hammer",
+            "icon": "clipboard-check",
             "pages": [
               "api-reference/permits/list"
             ]

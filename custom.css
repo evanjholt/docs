@@ -113,25 +113,21 @@ button[data-testid="try-it-button"] svg {
 
 /* Standalone code block copy-button fade override */
 .code-block .print\:hidden {
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(241, 238, 232, 0.2) 10px,
-    rgba(241, 238, 232, 0.5) 25px,
-    rgba(241, 238, 232, 0.8) 35px,
-    #F1EEE8 45px
-  ) !important;
+  background-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(241, 238, 232, 0.2) 10px,
+      rgba(241, 238, 232, 0.5) 25px,
+      rgba(241, 238, 232, 0.8) 35px,
+      #F1EEE8 45px) !important;
 }
 
 .dark .code-block .print\:hidden {
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(29, 26, 22, 0.2) 10px,
-    rgba(29, 26, 22, 0.5) 25px,
-    rgba(29, 26, 22, 0.8) 35px,
-    #1D1A16 45px
-  ) !important;
+  background-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(29, 26, 22, 0.2) 10px,
+      rgba(29, 26, 22, 0.5) 25px,
+      rgba(29, 26, 22, 0.8) 35px,
+      #1D1A16 45px) !important;
 }
 
 /* Card group overrides */
