@@ -1,6 +1,6 @@
 ---
 title: "List Contributions"
-api: "GET /api/v1/contributions/list"
+api: "GET /api/v1/contributions"
 description: "Retrieve a list of political contributions made to federal parties and candidates."
 ---
 
@@ -8,37 +8,74 @@ Get a standardized list of individual and corporate contributions, filterable by
 
 ### Query Parameters
 
-<ParamField query="limit" type="integer" default="100">
-  Maximum number of contributions to return. Maximum limits map to your plan (100 for Basic, 1,000 for Pro, 10,000 for Enterprise).
+<ParamField query="contributor" type="string">
+  Partial match on contributor name.
 </ParamField>
 
-<ParamField query="offset" type="integer" default="0">
-  Number of records to skip for pagination.
+<ParamField query="recipient" type="string">
+  Partial match on recipient name.
 </ParamField>
 
 <ParamField query="party" type="string">
-  Filter by the recipient political party (e.g., `Liberal`, `Conservative`, `NDP`).
+  Partial match on political party.
 </ParamField>
 
-<ParamField query="riding" type="string">
-  Filter contributions directed to candidates in a specific electoral district or riding.
+<ParamField query="entity_type" type="string">
+  Exact match on political entity type.
+</ParamField>
+
+<ParamField query="contributor_type" type="string">
+  Exact match on contributor type.
+</ParamField>
+
+<ParamField query="contributor_province" type="string">
+  Exact match on contributor province.
+</ParamField>
+
+<ParamField query="electoral_event" type="string">
+  Exact match on electoral event.
+</ParamField>
+
+<ParamField query="year" type="integer">
+  Exact match on contribution year.
+</ParamField>
+
+<ParamField query="min_amount" type="number">
+  Minimum monetary amount.
+</ParamField>
+
+<ParamField query="max_amount" type="number">
+  Maximum monetary amount.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number. Default: `1`
+</ParamField>
+
+<ParamField query="per_page" type="integer">
+  Results per page. Default: `50`. Max: `200`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Alias for `per_page`
 </ParamField>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/contributions/list?limit=10&party=Liberal" \
+curl "https://api.northaxiumdata.ca/api/v1/contributions?party=Liberal&page=2&per_page=10" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/api/v1/contributions/list"
+url = "https://api.northaxiumdata.ca/api/v1/contributions"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
-    "limit": 10,
-    "party": "Liberal"
+    "party": "Liberal",
+    "page": 2,
+    "per_page": 10
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -48,10 +85,11 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/api/v1/contributions/list');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/contributions');
 url.search = new URLSearchParams({
-  limit: '10',
-  party: 'Liberal'
+  party: 'Liberal',
+  page: '2',
+  per_page: '10'
 });
 
 fetch(url, {
@@ -71,20 +109,21 @@ fetch(url, {
 {
   "data": [
     {
-      "contribution_id": "CON-93821",
+      "record_id": "CON-93821",
       "contributor_name": "John Doe",
       "contributor_city": "Toronto",
       "contributor_province": "ON",
       "recipient_name": "Liberal Party of Canada",
-      "recipient_type": "Political Party",
-      "amount": 1500.00,
-      "date": "2023-08-12"
+      "political_party": "Liberal Party of Canada",
+      "monetary_amount": 1500.00,
+      "contribution_date": "2023-08-12"
     }
   ],
   "meta": {
     "total": 1,
-    "limit": 10,
-    "offset": 0
+    "page": 2,
+    "per_page": 10,
+    "pages": 1
   }
 }
 ```

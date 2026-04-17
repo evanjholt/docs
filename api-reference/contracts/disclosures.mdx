@@ -34,25 +34,29 @@ Returns Treasury Board of Canada Secretariat (TBS) proactive disclosure records 
   ISO 8601 end date
 </ParamField>
 
-<ParamField query="limit" type="integer">
+<ParamField query="page" type="integer">
+  Page number. Default: `1`
+</ParamField>
+
+<ParamField query="per_page" type="integer">
   Results per page. Default: `50`. Max: `200`
 </ParamField>
 
-<ParamField query="offset" type="integer">
-  Pagination offset. Default: `0`
+<ParamField query="limit" type="integer">
+  Alias for `per_page`
 </ParamField>
 
 <RequestExample>
 ```bash cURL
 curl -H "X-API-Key: your_api_key_here" \
-  "https://api.northaxiumdata.ca/api/v1/disclosures?department=National%20Defence&limit=10"
+  "https://api.northaxiumdata.ca/api/v1/disclosures?department=National%20Defence&page=2&per_page=10"
 ```
 
 ```python Python
 import requests
 
 headers = {"X-API-Key": "your_api_key_here"}
-params = {"department": "National Defence", "limit": 10}
+params = {"department": "National Defence", "page": 2, "per_page": 10}
 
 response = requests.get(
     "https://api.northaxiumdata.ca/api/v1/disclosures",
@@ -72,14 +76,15 @@ print(response.json())
       "vendor": "Lockheed Martin Canada Inc",
       "department": "National Defence | Défense nationale",
       "value": 8430000.00,
-      "event_date": "2023-09-30",
+      "date": "2023-09-30",
       "source_dataset": "open.canada contracts (PP-Contracts)"
     }
   ],
   "meta": {
     "total": 550306,
-    "limit": 10,
-    "offset": 0
+    "page": 2,
+    "per_page": 10,
+    "pages": 55031
   }
 }
 ```

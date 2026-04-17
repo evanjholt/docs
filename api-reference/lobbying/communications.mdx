@@ -8,30 +8,50 @@ Access records of monthly communication reports describing interactions between 
 
 ### Query Parameters
 
-<ParamField query="limit" type="integer" default="100">
-  Maximum number of records to return. Maximum limits map to your plan (100 for Basic, 1,000 for Pro, 10,000 for Enterprise).
+<ParamField query="client" type="string">
+  Partial match on client organization name.
 </ParamField>
 
-<ParamField query="offset" type="integer" default="0">
-  Number of records to skip for pagination.
+<ParamField query="dpoh" type="string">
+  Partial match on the designated public office holder name.
 </ParamField>
 
-<ParamField query="date_start" type="string">
-  Filter for communications that occurred on or after this date (`YYYY-MM-DD`).
+<ParamField query="institution" type="string">
+  Partial match on the department or institution contacted.
 </ParamField>
 
-<ParamField query="date_end" type="string">
-  Filter for communications that occurred on or before this date (`YYYY-MM-DD`).
+<ParamField query="lobbyist" type="string">
+  Partial match on the lobbyist name.
 </ParamField>
 
-<ParamField query="government_institution" type="string">
-  Filter by the federal department or institution contacted.
+<ParamField query="subject" type="string">
+  Partial match on the subject labels or subject text.
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  ISO 8601 start date.
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  ISO 8601 end date.
+</ParamField>
+
+<ParamField query="page" type="integer">
+  Page number. Default: `1`
+</ParamField>
+
+<ParamField query="per_page" type="integer">
+  Results per page. Default: `50`. Max: `200`
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Alias for `per_page`
 </ParamField>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/lobbying/communications?limit=5&government_institution=Finance" \
+curl "https://api.northaxiumdata.ca/api/v1/lobbying/communications?institution=Finance&page=2&per_page=5" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -41,8 +61,9 @@ import requests
 url = "https://api.northaxiumdata.ca/api/v1/lobbying/communications"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
-    "limit": 5,
-    "government_institution": "Finance"
+    "institution": "Finance",
+    "page": 2,
+    "per_page": 5
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -54,8 +75,9 @@ const fetch = require('node-fetch');
 
 const url = new URL('https://api.northaxiumdata.ca/api/v1/lobbying/communications');
 url.search = new URLSearchParams({
-  limit: '5',
-  government_institution: 'Finance'
+  institution: 'Finance',
+  page: '2',
+  per_page: '5'
 });
 
 fetch(url, {
@@ -75,24 +97,19 @@ fetch(url, {
 {
   "data": [
     {
-      "communication_id": "COM-992381",
-      "date_of_communication": "2023-10-15",
+      "com_id": "COM-992381",
+      "date": "2023-10-15",
       "lobbyist_name": "Jane Smith",
       "client": "Green Energy Solutions Ltd.",
-      "public_office_holders": [
-        {
-          "name": "John Doe",
-          "title": "Director of Technology",
-          "institution": "Department of Finance Canada"
-        }
-      ],
-      "subject_matter": ["Taxation and Finance", "Environment"]
+      "institution": "Department of Finance Canada",
+      "subjects": "Taxation and Finance, Environment"
     }
   ],
   "meta": {
     "total": 1,
-    "limit": 5,
-    "offset": 0
+    "page": 2,
+    "per_page": 5,
+    "pages": 1
   }
 }
 ```

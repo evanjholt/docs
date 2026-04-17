@@ -1,6 +1,6 @@
 ---
 title: "Building Permits"
-api: "GET /api/v1/permits/list"
+api: "GET /api/v1/permits"
 description: "Retrieve a list of commercial, residential, and industrial building permits issued across Canada."
 ---
 
@@ -16,29 +16,57 @@ Get a standardized list of building permits aggregated from municipalities, filt
   Number of records to skip for pagination.
 </ParamField>
 
-<ParamField query="city" type="string">
-  Filter permits by issuing municipality.
+<ParamField query="municipality" type="string">
+  Filter permits by issuing municipality slug. Comma-separated values are accepted.
 </ParamField>
 
-<ParamField query="year" type="integer">
-  Filter by the year the permit was issued (e.g., `2023`).
+<ParamField query="q" type="string">
+  Partial match on address or work description.
+</ParamField>
+
+<ParamField query="permit_type" type="string">
+  One of `new_construction`, `renovation`, `addition`, `demolition`, `change_of_use`, or `other`.
+</ParamField>
+
+<ParamField query="status" type="string">
+  One of `issued`, `in_review`, `completed`, `cancelled`, or `expired`.
+</ParamField>
+
+<ParamField query="issued_after" type="string">
+  ISO 8601 start date.
+</ParamField>
+
+<ParamField query="issued_before" type="string">
+  ISO 8601 end date.
+</ParamField>
+
+<ParamField query="lat" type="number">
+  Latitude for proximity search. Must be provided with `lng` and `radius_km`.
+</ParamField>
+
+<ParamField query="lng" type="number">
+  Longitude for proximity search. Must be provided with `lat` and `radius_km`.
+</ParamField>
+
+<ParamField query="radius_km" type="number">
+  Radius in kilometres for proximity search. Must be between `0.1` and `100`.
 </ParamField>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/permits/list?limit=10&city=Toronto" \
+curl "https://api.northaxiumdata.ca/api/v1/permits?municipality=toronto&limit=10" \
   -H "X-API-Key: <your-api-key>"
 ```
 
 ```python Python
 import requests
 
-url = "https://api.northaxiumdata.ca/api/v1/permits/list"
+url = "https://api.northaxiumdata.ca/api/v1/permits"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
-    "city": "Toronto"
+    "municipality": "toronto"
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -48,10 +76,10 @@ print(response.json())
 ```javascript Node.js
 const fetch = require('node-fetch');
 
-const url = new URL('https://api.northaxiumdata.ca/api/v1/permits/list');
+const url = new URL('https://api.northaxiumdata.ca/api/v1/permits');
 url.search = new URLSearchParams({
   limit: '10',
-  city: 'Toronto'
+  municipality: 'toronto'
 });
 
 fetch(url, {
@@ -71,19 +99,21 @@ fetch(url, {
 {
   "data": [
     {
-      "permit_id": "BP-2023-88123",
-      "city": "Toronto",
+      "record_id": "BP-2023-88123",
+      "municipality": "toronto",
       "province": "ON",
-      "issue_date": "2023-05-15",
-      "permit_type": "Commercial",
-      "value": 4500000.00,
-      "description": "New construction of office building"
+      "issued_date": "2023-05-15",
+      "permit_type": "new_construction",
+      "estimated_cost": 4500000.00,
+      "work_description": "New construction of office building"
     }
   ],
   "meta": {
     "total": 1,
     "limit": 10,
-    "offset": 0
+    "offset": 0,
+    "municipality": "toronto",
+    "proximity": null
   }
 }
 ```

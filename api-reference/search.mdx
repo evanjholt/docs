@@ -8,22 +8,18 @@ Perform a global text search to find references to a specific company, individua
 
 ### Query Parameters
 
-<ParamField query="query" type="string" required>
+<ParamField query="q" type="string" required>
   The search term or phrase (e.g., `"Green Energy"`, `"Jane Doe"`).
 </ParamField>
 
-<ParamField query="limit" type="integer" default="50">
-  Maximum number of search results to return across all categories. Maximum limits map to your plan (50 for Basic, 500 for Pro, 5,000 for Enterprise).
-</ParamField>
-
-<ParamField query="type" type="string">
-  Restrict search to a specific dataset type (e.g., `contracts`, `lobbying`). If omitted, searches all available datasets.
+<ParamField query="results_per_domain" type="integer" default="5">
+  Maximum number of results to return per dataset group.
 </ParamField>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/search?query=Green+Energy&limit=5" \
+curl "https://api.northaxiumdata.ca/api/v1/search?q=Green+Energy&results_per_domain=5" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -33,8 +29,8 @@ import requests
 url = "https://api.northaxiumdata.ca/api/v1/search"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
-    "query": "Green Energy",
-    "limit": 5
+    "q": "Green Energy",
+    "results_per_domain": 5
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -46,8 +42,8 @@ const fetch = require('node-fetch');
 
 const url = new URL('https://api.northaxiumdata.ca/api/v1/search');
 url.search = new URLSearchParams({
-  query: 'Green Energy',
-  limit: '5'
+  q: 'Green Energy',
+  results_per_domain: '5'
 });
 
 fetch(url, {
@@ -65,24 +61,34 @@ fetch(url, {
 
 ```json 200
 {
-  "data": [
-    {
-      "type": "contract",
-      "id": "CON-8841-A",
-      "title": "Solar Panel Installation",
-      "snippet": "...awarded to Green Energy Co. for the installation of..."
+  "data": {
+    "contracts": {
+      "total": 12,
+      "results": [
+        {
+          "record_id": "CON-8841-A",
+          "dataset": "contracts",
+          "label": "Green Energy Co. — Solar Panel Installation",
+          "url": "/api/v1/contracts/CON-8841-A"
+        }
+      ]
     },
-    {
-      "type": "lobbying_registration",
-      "id": "812039-12345",
-      "title": "Green Energy Solutions Corp.",
-      "snippet": "...registration details for Green Energy Solutions Corp. representing..."
+    "lobbying": {
+      "total": 3,
+      "results": [
+        {
+          "record_id": "812039-12345",
+          "dataset": "lobbying",
+          "label": "Green Energy Solutions Corp.",
+          "url": "/api/v1/lobbying/communications/812039-12345"
+        }
+      ]
     }
-  ],
+  },
   "meta": {
-    "total": 2,
-    "limit": 5,
-    "offset": 0
+    "q": "Green Energy",
+    "results_per_domain": 5,
+    "domains_with_results": 2
   }
 }
 ```
