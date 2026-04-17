@@ -6,7 +6,7 @@ api: "GET /api/v1/vendors/{name}"
 
 ## Overview
 
-Returns an aggregated procurement profile for a vendor — total contract value, contract count, top departments, and recent contracts. The `name` parameter must match the vendor string exactly as it appears in the source data. Use [Browse Vendors](/api-reference/vendors/list) first to find the exact string.
+Returns an aggregated procurement profile for a vendor — total contract value, contract count, top departments, and recent contracts. The backend attempts an exact match first, then falls back to prefix and partial-match canonicalization. Use [Browse Vendors](/api-reference/vendors/list) first to inspect likely source strings.
 
 ## Path Parameters
 
@@ -32,7 +32,7 @@ response = requests.get(
 )
 profile = response.json()["data"]
 print(f"Total value: ${profile['total_value']:,.0f}")
-print(f"Top department: {profile['top_departments'][0]['department']}")
+print(f"Top department: {profile['departments'][0]['name']}")
 ```
 </RequestExample>
 
@@ -43,9 +43,11 @@ print(f"Top department: {profile['top_departments'][0]['department']}")
     "vendor": "Palantir Technologies Canada Inc",
     "total_value": 23840000.00,
     "contract_count": 14,
-    "top_departments": [
+    "first_contract_date": "2022-04-08",
+    "last_contract_date": "2024-11-01",
+    "departments": [
       {
-        "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
+        "name": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
         "total_value": 12500000.00,
         "contract_count": 8
       }
@@ -55,7 +57,7 @@ print(f"Top department: {profile['top_departments'][0]['department']}")
         "record_id": "abc123",
         "value": 3200000.00,
         "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
-        "event_date": "2023-11-01"
+        "date": "2023-11-01"
       }
     ]
   }
@@ -65,7 +67,7 @@ print(f"Top department: {profile['top_departments'][0]['department']}")
 {
   "error": {
     "code": "NOT_FOUND",
-    "message": "No vendor profile found. Use /api/v1/vendors?q=... to find the exact source string."
+    "message": "Vendor not found."
   }
 }
 ```

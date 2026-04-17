@@ -72,7 +72,7 @@ url = "https://api.northaxiumdata.ca/api/v1/lobbying/communications?limit=10"
 response = requests.get(url, headers=headers)
 
 for comm in response.json()["data"]:
-    print(f"{comm['client_org']} → {comm['dpoh_name']} ({comm['communication_date']})")
+    print(f"{comm['client']} → {comm['dpoh_name']} ({comm['date']})")
 ```
 
 </Accordion>

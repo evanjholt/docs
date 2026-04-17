@@ -43,25 +43,29 @@ print(response.json())
 {
   "data": {
     "solicitation_number": "PS23-AG-004",
+    "coverage_note": "solicitation_number coverage is ~4% of procurement records",
     "tender": {
       "record_id": "tender_abc",
-      "closing_date": "2023-03-15",
+      "event_type": "tender",
+      "date": "2023-03-15",
       "department": "Public Services and Procurement Canada"
     },
     "awards": [
       {
         "record_id": "award_xyz",
+        "event_type": "award",
         "vendor": "Acme Government Solutions Inc",
         "value": 450000.00,
-        "award_date": "2023-04-02"
+        "date": "2023-04-02"
       }
     ],
     "contracts": [
       {
         "record_id": "contract_123",
+        "event_type": "contract",
         "vendor": "Acme Government Solutions Inc",
         "value": 450000.00,
-        "event_date": "2023-04-15"
+        "date": "2023-04-15"
       }
     ]
   }
@@ -71,7 +75,7 @@ print(response.json())
 {
   "error": {
     "code": "NOT_FOUND",
-    "message": "No procurement records found for solicitation number PS23-AG-004."
+    "message": "Procurement lifecycle not found."
   }
 }
 ```

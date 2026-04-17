@@ -14,8 +14,20 @@ Returns all distinct federal department strings ranked by contract record count.
   Partial match on department name
 </ParamField>
 
+<ParamField query="sort_by" type="string">
+  Only `record_count`. Default: `record_count`
+</ParamField>
+
+<ParamField query="sort_order" type="string">
+  `asc` or `desc`. Default: `desc`
+</ParamField>
+
 <ParamField query="limit" type="integer">
   Max results. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
 </ParamField>
 
 <RequestExample>
@@ -43,7 +55,8 @@ print(response.json())
   "data": [
     {
       "department": "National Defence | Défense nationale",
-      "record_count": 18432
+      "record_count": 18432,
+      "total_value": 4821034521.00
     }
   ],
   "meta": {

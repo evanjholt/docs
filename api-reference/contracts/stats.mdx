@@ -14,21 +14,65 @@ Returns grouped aggregate statistics across all federal contract records. Useful
   Grouping dimension. Options: `department`, `vendor`, `year`. Default: `department`
 </ParamField>
 
+<ParamField query="sum_field" type="string">
+  Only `value`. Default: `value`
+</ParamField>
+
+<ParamField query="vendor" type="string">
+  Partial match on vendor name
+</ParamField>
+
+<ParamField query="department" type="string">
+  Partial match on department name
+</ParamField>
+
+<ParamField query="method" type="string">
+  Exact match on `procurement_method`
+</ParamField>
+
+<ParamField query="source" type="string">
+  Exact match on `source_dataset`
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum contract value
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum contract value
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  ISO 8601 start date
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  ISO 8601 end date
+</ParamField>
+
 <ParamField query="limit" type="integer">
   Max groups to return. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
 </ParamField>
 
 <RequestExample>
 ```bash cURL
 curl -H "X-API-Key: your_api_key_here" \
-  "https://api.northaxiumdata.ca/api/v1/contracts/stats?group_by=department&limit=10"
+  "https://api.northaxiumdata.ca/api/v1/contracts/stats?group_by=department&department=National%20Defence&limit=10"
 ```
 
 ```python Python
 import requests
 
 headers = {"X-API-Key": "your_api_key_here"}
-params = {"group_by": "department", "limit": 10}
+params = {
+    "group_by": "department",
+    "department": "National Defence",
+    "limit": 10
+}
 
 response = requests.get(
     "https://api.northaxiumdata.ca/api/v1/contracts/stats",
@@ -44,19 +88,24 @@ print(response.json())
 {
   "data": [
     {
-      "department": "National Defence | Défense nationale",
-      "total_value": 4821034521.00,
-      "contract_count": 18432
+      "group_by": "department",
+      "group_value": "National Defence | Défense nationale",
+      "record_count": 18432,
+      "sum_field": "value",
+      "sum_value": 4821034521.00
     },
     {
-      "department": "Public Services and Procurement Canada | Services publics et Approvisionnement Canada",
-      "total_value": 3109823400.00,
-      "contract_count": 12891
+      "group_by": "department",
+      "group_value": "Public Services and Procurement Canada | Services publics et Approvisionnement Canada",
+      "record_count": 12891,
+      "sum_field": "value",
+      "sum_value": 3109823400.00
     }
   ],
   "meta": {
-    "group_by": "department",
-    "total_groups": 482
+    "total": 482,
+    "limit": 10,
+    "offset": 0
   }
 }
 ```
@@ -64,7 +113,7 @@ print(response.json())
 {
   "error": {
     "code": "BAD_REQUEST",
-    "message": "Invalid group_by value. Must be one of: department, vendor, year."
+    "message": "group_by must be one of: department, vendor, year."
   }
 }
 ```

@@ -1,0 +1,107 @@
+---
+title: "Lobbyist Profiles"
+api: "GET /api/v1/lobbyists/{lobbyist_id}"
+description: "Retrieve a detailed profile of a registered lobbyist."
+---
+
+Get a pre-aggregated profile for a lobbyist from the `lobbyists` table, including recent communications.
+
+### Path Parameters
+
+<ParamField path="lobbyist_id" type="string" required>
+  The lobbyist identifier from the `lobbyists` table.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/api/v1/lobbyists/12345" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/api/v1/lobbyists/12345"
+headers = {"X-API-Key": "<your-api-key>"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+fetch('https://api.northaxiumdata.ca/api/v1/lobbyists/12345', {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": {
+    "lobbyist_id": "12345",
+    "lobbyist_name": "Jane Smith",
+    "firm_name": "Capital Strategy Group",
+    "registration_type": "Consultant",
+    "client_count": 12,
+    "total_communications": 48,
+    "active_registrations": 4,
+    "top_institutions": [
+      { "institution": "Innovation, Science and Economic Development Canada", "count": 9 }
+    ],
+    "top_subjects": [
+      { "subject": "Industry", "count": 11 }
+    ],
+    "first_seen_date": "2018-03-12",
+    "last_seen_date": "2026-03-20",
+    "recent_communications": [
+      {
+        "event_id": 987654,
+        "com_id": "COM-992381",
+        "client": "Tech Innovators North",
+        "dpoh_name": "John Doe",
+        "institution": "Department of Finance Canada",
+        "date": "2026-03-20"
+      }
+    ]
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Lobbyist not found."
+  }
+}
+```
+
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded."
+  }
+}
+```
+
+</ResponseExample>

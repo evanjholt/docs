@@ -39,10 +39,10 @@ print(f"Total communications on this subject: {data['meta']['total']}")
 print()
 
 for comm in data["data"]:
-    print(f"Client:      {comm['client_org']}")
+    print(f"Client:      {comm['client']}")
     print(f"DPOH:        {comm['dpoh_name']} ({comm['institution']})")
-    print(f"Date:        {comm['communication_date']}")
-    print(f"Subjects:    {', '.join(comm.get('subject_labels', []))}")
+    print(f"Date:        {comm['date']}")
+    print(f"Subjects:    {comm.get('subjects')}")
     print("---")
 ```
 
@@ -60,13 +60,13 @@ response = requests.get(
 )
 profile = response.json()["data"]
 
-print(f"Client: {profile['client_org']}")
+print(f"Client: {profile['client']}")
 print(f"Total communications: {profile['total_communications']}")
 print(f"Active registrations: {profile['active_registrations']}")
 
 print("\nTop institutions lobbied:")
 for inst in profile["top_institutions"][:5]:
-    print(f"  {inst['institution']}: {inst['communication_count']} communications")
+    print(f"  {inst['institution']}: {inst['count']} communications")
 
 print("\nTop subjects:")
 for subj in profile["top_subjects"][:5]:
@@ -118,7 +118,7 @@ for contract in contracts:
     # check for partial overlap between contract department and lobbied institution
     for lobbied in lobbied_depts:
         if any(word in lobbied for word in dept.split("|")[0].strip().split()):
-            print(f"  {contract['vendor']} — ${contract['value']:,.0f} from {contract['department']} on {contract['event_date']}")
+            print(f"  {contract['vendor']} — ${contract['value']:,.0f} from {contract['department']} on {contract['date']}")
             break
 ```
 
@@ -142,7 +142,7 @@ data = response.json()
 
 print(f"Active registrations targeting this institution: {data['meta']['total']}")
 for reg in data["data"]:
-    print(f"  {reg['client_org_name']} — {reg['subject_labels']} (since {reg['effective_date']})")
+    print(f"  {reg['client']} — {reg['subject_labels']} (since {reg['effective_date']})")
 ```
 
 ## What's happening here

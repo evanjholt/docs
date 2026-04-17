@@ -26,6 +26,10 @@ Returns 921K+ research grant records from the Natural Sciences and Engineering R
   Partial match on institution name
 </ParamField>
 
+<ParamField query="program" type="string">
+  Partial match on program name
+</ParamField>
+
 <ParamField query="province" type="string">
   Two-letter province code — e.g. `ON`, `BC`, `QC`
 </ParamField>
@@ -42,8 +46,20 @@ Returns 921K+ research grant records from the Natural Sciences and Engineering R
   Maximum award amount in CAD
 </ParamField>
 
+<ParamField query="sort_by" type="string">
+  `value` or `date`. Default: `date`
+</ParamField>
+
+<ParamField query="sort_order" type="string">
+  `asc` or `desc`. Default: `desc`
+</ParamField>
+
 <ParamField query="limit" type="integer">
   Results per page. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
 </ParamField>
 
 <RequestExample>
@@ -80,7 +96,7 @@ for grant in response.json()["data"]:
       "record_id": "nserc_abc123",
       "researcher_name": "Dr. Jane Smith",
       "institution": "University of Toronto",
-      "province_en": "Ontario",
+      "province": "ON",
       "award_amount": 185000.00,
       "fiscal_year": "2022-23",
       "program_en": "Discovery Grants Program",
@@ -99,7 +115,7 @@ for grant in response.json()["data"]:
 {
   "error": {
     "code": "BAD_REQUEST",
-    "message": "Invalid source value. Must be one of: NSERC, SSHRC."
+    "message": "source must be NSERC or SSHRC."
   }
 }
 ```

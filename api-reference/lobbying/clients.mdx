@@ -1,0 +1,96 @@
+---
+title: "Client Profiles"
+api: "GET /api/v1/clients/{name}"
+description: "Retrieve an aggregated lobbying profile for a client organization."
+---
+
+Get an aggregated lobbying profile for a client organization, including top institutions, subjects, and lobbyists.
+
+### Path Parameters
+
+<ParamField path="name" type="string" required>
+  Client organization name to resolve. Partial names are accepted and normalized to the best matching client string.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/api/v1/clients/Shopify" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/api/v1/clients/Shopify"
+headers = {"X-API-Key": "<your-api-key>"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+fetch('https://api.northaxiumdata.ca/api/v1/clients/Shopify', {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": {
+    "client": "Shopify Inc.",
+    "total_communications": 110,
+    "active_registrations": 3,
+    "top_institutions": [
+      { "institution": "Innovation, Science and Economic Development Canada", "count": 18 }
+    ],
+    "top_subjects": [
+      { "subject": "Industry", "count": 22 }
+    ],
+    "top_lobbyists": [
+      { "lobbyist": "Clark Rabbior", "firm": "Shopify Inc.", "count": 15 }
+    ],
+    "first_communication_date": "2019-01-11",
+    "last_communication_date": "2026-03-12"
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Client not found."
+  }
+}
+```
+
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded."
+  }
+}
+```
+
+</ResponseExample>

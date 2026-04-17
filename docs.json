@@ -104,7 +104,8 @@
             "pages": [
               "api-reference/lobbying/communications",
               "api-reference/lobbying/registrations",
-              "api-reference/lobbying/profiles"
+              "api-reference/lobbying/lobbyists",
+              "api-reference/lobbying/clients"
             ]
           },
           {

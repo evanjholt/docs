@@ -20,8 +20,20 @@ Returns a ranked list of distinct vendor name strings from the contracts dataset
   Sort order. Options: `total_value`, `contract_count`. Default: `total_value`
 </ParamField>
 
+<ParamField query="sort_order" type="string">
+  `asc` or `desc`. Default: `desc`
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum aggregated contract value
+</ParamField>
+
 <ParamField query="limit" type="integer">
   Max results. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
 </ParamField>
 
 <RequestExample>

@@ -26,7 +26,6 @@ headers = {"X-API-Key": API_KEY}
 params = {
     "vendor": "Palantir",   # partial match — finds all Palantir entities
     "limit": 10,
-    "sort_by": "value",     # largest contracts first
 }
 
 response = requests.get(f"{BASE_URL}/contracts", headers=headers, params=params)
@@ -39,7 +38,7 @@ for contract in data["data"]:
     print(f"Vendor:     {contract['vendor']}")
     print(f"Department: {contract['department']}")
     print(f"Value:      ${contract['value']:,.0f}")
-    print(f"Date:       {contract['event_date']}")
+    print(f"Date:       {contract['date']}")
     print(f"Method:     {contract['procurement_method']}")
     print("---")
 ```
@@ -94,8 +93,8 @@ print(f"\nVendor profile: {profile['vendor']}")
 print(f"Total value: ${profile['total_value']:,.0f}")
 print(f"Contract count: {profile['contract_count']}")
 print("\nTop departments:")
-for dept in profile["top_departments"][:3]:
-    print(f"  {dept['department']}: ${dept['total_value']:,.0f}")
+for dept in profile["departments"][:3]:
+    print(f"  {dept['name']}: ${dept['total_value']:,.0f}")
 ```
 
 ## Get departmental spending statistics
@@ -113,7 +112,7 @@ stats = response.json()["data"]
 
 print("Top departments by total contract value:")
 for i, row in enumerate(stats, 1):
-    print(f"  {i}. {row['department']}: ${row['total_value']:,.0f} ({row['contract_count']} contracts)")
+    print(f"  {i}. {row['group_value']}: ${row['sum_value']:,.0f} ({row['record_count']} contracts)")
 ```
 
 ## What's happening here

@@ -39,8 +39,10 @@ print(response.json())
 {
   "data": {
     "department": "National Defence | Défense nationale",
+    "record_count": 18432,
     "total_value": 4821034521.00,
-    "contract_count": 18432,
+    "first_event_date": "2004-01-09",
+    "last_event_date": "2025-12-01",
     "top_vendors": [
       {
         "vendor": "Lockheed Martin Canada Inc",
@@ -48,11 +50,20 @@ print(response.json())
         "contract_count": 124
       }
     ],
-    "event_type_breakdown": {
-      "contract": 15200,
-      "award": 2100,
-      "tender": 1132
-    }
+    "by_event_type": [
+      { "event_type": "award", "count": 2100, "total_value": 0.00 },
+      { "event_type": "contract", "count": 15200, "total_value": 4821034521.00 },
+      { "event_type": "tender", "count": 1132, "total_value": 0.00 }
+    ],
+    "recent_contracts": [
+      {
+        "record_id": "abc123",
+        "vendor": "Lockheed Martin Canada Inc",
+        "department": "National Defence | Défense nationale",
+        "value": 3200000.00,
+        "date": "2025-11-01"
+      }
+    ]
   }
 }
 ```
@@ -60,7 +71,7 @@ print(response.json())
 {
   "error": {
     "code": "NOT_FOUND",
-    "message": "No department profile found. Use /api/v1/departments?q=... to find the exact name."
+    "message": "Department not found."
   }
 }
 ```
