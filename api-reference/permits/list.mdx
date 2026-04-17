@@ -4,7 +4,7 @@ api: "GET /api/v1/permits"
 description: "Retrieve a list of commercial, residential, and industrial building permits issued across Canada."
 ---
 
-Get a standardized list of building permits aggregated from municipalities, filterable by city, year, and value.
+Get a standardized list of building permits aggregated from municipalities, filterable by municipality, text search, permit metadata, and update window.
 
 ### Query Parameters
 
@@ -21,15 +21,35 @@ Get a standardized list of building permits aggregated from municipalities, filt
 </ParamField>
 
 <ParamField query="q" type="string">
-  Partial match on address or work description.
+  Partial match across the permit search surface, including address, neighbourhood, work description, raw and canonical permit type, building type, and applicant or contractor names where available.
 </ParamField>
 
 <ParamField query="permit_type" type="string">
   One of `new_construction`, `renovation`, `addition`, `demolition`, `change_of_use`, or `other`.
 </ParamField>
 
+<ParamField query="permit_type_raw" type="string">
+  Partial match on the municipality's raw permit type or class text.
+</ParamField>
+
 <ParamField query="status" type="string">
   One of `issued`, `in_review`, `completed`, `cancelled`, or `expired`.
+</ParamField>
+
+<ParamField query="building_type" type="string">
+  Partial match on the normalized building or property type text.
+</ParamField>
+
+<ParamField query="neighbourhood" type="string">
+  Partial match on neighbourhood, ward, or district text where available.
+</ParamField>
+
+<ParamField query="applicant" type="string">
+  Partial match on `applicant_name`.
+</ParamField>
+
+<ParamField query="contractor" type="string">
+  Partial match on `contractor_name`.
 </ParamField>
 
 <ParamField query="issued_after" type="string">
@@ -38,6 +58,22 @@ Get a standardized list of building permits aggregated from municipalities, filt
 
 <ParamField query="issued_before" type="string">
   ISO 8601 end date.
+</ParamField>
+
+<ParamField query="updated_after" type="string">
+  ISO 8601 start date for the record's `last_updated` timestamp.
+</ParamField>
+
+<ParamField query="updated_before" type="string">
+  ISO 8601 end date for the record's `last_updated` timestamp.
+</ParamField>
+
+<ParamField query="sort_by" type="string" default="date">
+  One of `date`, `issued_date`, `application_date`, `updated`, `value`, or `distance`. `distance` requires `lat`, `lng`, and `radius_km`.
+</ParamField>
+
+<ParamField query="sort_order" type="string" default="desc">
+  Either `asc` or `desc`.
 </ParamField>
 
 <ParamField query="lat" type="number">
@@ -55,7 +91,7 @@ Get a standardized list of building permits aggregated from municipalities, filt
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/permits?municipality=toronto&limit=10" \
+curl "https://api.northaxiumdata.ca/api/v1/permits?municipality=toronto&permit_type_raw=demolition&sort_by=updated&limit=10" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -66,7 +102,9 @@ url = "https://api.northaxiumdata.ca/api/v1/permits"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "limit": 10,
-    "municipality": "toronto"
+    "municipality": "toronto",
+    "permit_type_raw": "demolition",
+    "sort_by": "updated"
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -79,7 +117,9 @@ const fetch = require('node-fetch');
 const url = new URL('https://api.northaxiumdata.ca/api/v1/permits');
 url.search = new URLSearchParams({
   limit: '10',
-  municipality: 'toronto'
+  municipality: 'toronto',
+  permit_type_raw: 'demolition',
+  sort_by: 'updated'
 });
 
 fetch(url, {
@@ -102,10 +142,17 @@ fetch(url, {
       "record_id": "BP-2023-88123",
       "municipality": "toronto",
       "province": "ON",
+      "permit_number_raw": "23 123456 BLD 00",
+      "source_reference": "23 123456 BLD 00",
       "issued_date": "2023-05-15",
       "permit_type": "new_construction",
+      "permit_type_raw": "New Building",
       "estimated_cost": 4500000.00,
-      "work_description": "New construction of office building"
+      "work_description": "New construction of office building",
+      "applicant_name": null,
+      "contractor_name": "Example Construction Ltd.",
+      "zoning_raw": null,
+      "last_updated": "2026-04-16T12:34:56"
     }
   ],
   "meta": {
@@ -113,6 +160,8 @@ fetch(url, {
     "limit": 10,
     "offset": 0,
     "municipality": "toronto",
+    "sort_by": "last_updated",
+    "sort_order": "desc",
     "proximity": null
   }
 }
