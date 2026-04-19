@@ -67,6 +67,8 @@
             "icon": "file-contract",
             "pages": [
               "api-reference/contracts/list",
+              "api-reference/contracts/tenders",
+              "api-reference/contracts/awards",
               "api-reference/contracts/stats",
               "api-reference/contracts/disclosures",
               "api-reference/contracts/lifecycle"
@@ -94,7 +96,9 @@
             "pages": [
               "api-reference/grants/federal",
               "api-reference/grants/research",
+              "api-reference/grants/research-stats",
               "api-reference/grants/infrastructure",
+              "api-reference/grants/infrastructure-stats",
               "api-reference/grants/recipients"
             ]
           },

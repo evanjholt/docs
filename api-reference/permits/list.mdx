@@ -69,8 +69,12 @@ Get a standardized list of building permits aggregated from municipalities, filt
 </ParamField>
 
 <ParamField query="sort_by" type="string" default="date">
-  One of `date`, `issued_date`, `application_date`, `updated`, `value`, or `distance`. `distance` requires `lat`, `lng`, and `radius_km`.
+  One of `date`, `issued_date`, `application_date`, `updated`, `last_updated`, `published`, `value`, or `distance`. `distance` requires `lat`, `lng`, and `radius_km`.
 </ParamField>
+
+<Note>
+  For polling or incremental syncs, use `sort_by=last_updated&sort_order=desc` with `updated_after` set to your last successful sync timestamp.
+</Note>
 
 <ParamField query="sort_order" type="string" default="desc">
   Either `asc` or `desc`.

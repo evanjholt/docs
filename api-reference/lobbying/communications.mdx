@@ -36,22 +36,22 @@ Access records of monthly communication reports describing interactions between 
   ISO 8601 end date.
 </ParamField>
 
-<ParamField query="page" type="integer">
-  Page number. Default: `1`
-</ParamField>
-
-<ParamField query="per_page" type="integer">
-  Results per page. Default: `50`. Max: `200`
-</ParamField>
-
 <ParamField query="limit" type="integer">
-  Alias for `per_page`
+  Results per page. Default: `50`. Max: `500`
 </ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset for pagination. Default: `0`
+</ParamField>
+
+<Note>
+  `page` and `per_page` are accepted as input aliases for `limit` and offset-based pagination respectively.
+</Note>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/lobbying/communications?institution=Finance&page=2&per_page=5" \
+curl "https://api.northaxiumdata.ca/api/v1/lobbying/communications?institution=Finance&limit=5&offset=5" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -62,8 +62,8 @@ url = "https://api.northaxiumdata.ca/api/v1/lobbying/communications"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "institution": "Finance",
-    "page": 2,
-    "per_page": 5
+    "limit": 5,
+    "offset": 5
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -76,8 +76,8 @@ const fetch = require('node-fetch');
 const url = new URL('https://api.northaxiumdata.ca/api/v1/lobbying/communications');
 url.search = new URLSearchParams({
   institution: 'Finance',
-  page: '2',
-  per_page: '5'
+  limit: '5',
+  offset: '5'
 });
 
 fetch(url, {
@@ -101,15 +101,16 @@ fetch(url, {
       "date": "2023-10-15",
       "lobbyist_name": "Jane Smith",
       "client": "Green Energy Solutions Ltd.",
+      "dpoh_name": "Mark Carney",
+      "dpoh_title": "Minister of Finance",
       "institution": "Department of Finance Canada",
       "subjects": "Taxation and Finance, Environment"
     }
   ],
   "meta": {
-    "total": 1,
-    "page": 2,
-    "per_page": 5,
-    "pages": 1
+    "total": 355000,
+    "limit": 5,
+    "offset": 5
   }
 }
 ```

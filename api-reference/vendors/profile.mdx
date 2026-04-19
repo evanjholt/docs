@@ -8,10 +8,18 @@ api: "GET /api/v1/vendors/{name}"
 
 Returns an aggregated procurement profile for a vendor — total contract value, contract count, top departments, and recent contracts. The backend attempts an exact match first, then falls back to prefix and partial-match canonicalization. Use [Browse Vendors](/api-reference/vendors/list) first to inspect likely source strings.
 
+**Pattern:** `browse vendors` → `get vendor profile`
+
 ## Path Parameters
 
 <ParamField path="name" type="string" required>
-  Exact vendor name string as it appears in the source data — e.g. `Palantir Technologies Canada Inc`
+  Vendor name string — e.g. `Palantir Technologies Canada Inc`. Use the `vendor_key` field from the browse endpoint to construct the URL safely.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="name" type="string">
+  Alternative to the path parameter. When provided, this value takes precedence over the URL path segment. Use this for vendor names containing special characters (`&`, `/`, `+`) that may not survive URL path encoding reliably. For example: `GET /api/v1/vendors/_?name=SNC-Lavalin%20%26%20Associates`
 </ParamField>
 
 <RequestExample>

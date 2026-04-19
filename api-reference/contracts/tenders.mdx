@@ -1,25 +1,21 @@
 ---
-title: "List Contracts"
-description: "Search and filter federal procurement contracts from CanadaBuys and TBS."
-api: "GET /api/v1/contracts"
+title: "Tender Notices"
+description: "Search federal tender notices from CanadaBuys."
+api: "GET /api/v1/tenders"
 ---
 
 ## Overview
 
-Returns paginated federal contract records from CanadaBuys and TBS Proactive Disclosure. Use `vendor`, `department`, and date filters to narrow results. For an aggregated view of a specific vendor, use the [Vendor Profile](/api-reference/vendors/profile) endpoint instead.
+Returns federal tender notices — open and historical solicitations published on CanadaBuys. Use these to monitor active procurement opportunities or research the competitive landscape before a contract is awarded.
 
-## Getting Started
+For the full procurement lifecycle linking a tender to its award and contract, use the [Procurement Lifecycle](/api-reference/contracts/lifecycle) endpoint. For awarded contracts, use [List Contracts](/api-reference/contracts/list).
 
-There are only 3 steps for making a successful API call:
-
-1. Add your API key to the header as `X-API-Key`
-2. Add query parameters to filter the data
-3. Execute the request
+Single tender records are available at `GET /api/v1/tenders/{record_id}`.
 
 ## Query Parameters
 
 <ParamField query="vendor" type="string">
-  Partial match on vendor name (case-insensitive)
+  Partial match on vendor name. Note: many tender notices will not have a vendor — this field is only present when a specific supplier is named in the notice.
 </ParamField>
 
 <ParamField query="department" type="string">
@@ -35,11 +31,11 @@ There are only 3 steps for making a successful API call:
 </ParamField>
 
 <ParamField query="min_value" type="number">
-  Minimum contract value in CAD
+  Minimum estimated value in CAD
 </ParamField>
 
 <ParamField query="max_value" type="number">
-  Maximum contract value in CAD
+  Maximum estimated value in CAD
 </ParamField>
 
 <ParamField query="date_from" type="string">
@@ -58,36 +54,30 @@ There are only 3 steps for making a successful API call:
   Result offset for pagination. Default: `0`
 </ParamField>
 
-<Note>
-  `page` and `per_page` are accepted as input aliases for `limit` and offset-based pagination respectively.
-</Note>
-
 <RequestExample>
 ```bash cURL
 curl -H "X-API-Key: your_api_key_here" \
-  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5&offset=5"
+  "https://api.northaxiumdata.ca/api/v1/tenders?department=National%20Defence&limit=10"
 ```
 
 ```python Python
 import requests
 
 headers = {"X-API-Key": "your_api_key_here"}
-params = {"vendor": "Palantir", "limit": 5, "offset": 5}
+params = {"department": "National Defence", "limit": 10}
 
 response = requests.get(
-    "https://api.northaxiumdata.ca/api/v1/contracts",
+    "https://api.northaxiumdata.ca/api/v1/tenders",
     headers=headers,
     params=params
 )
-data = response.json()
-
-for contract in data["data"]:
-    print(f"{contract['vendor']}: ${contract['value']:,.0f}")
+for tender in response.json()["data"]:
+    print(f"{tender['date']} — {tender['department']}: {tender['description']}")
 ```
 
 ```javascript JavaScript
 const response = await fetch(
-  "https://api.northaxiumdata.ca/api/v1/contracts?vendor=Palantir&limit=5&offset=5",
+  "https://api.northaxiumdata.ca/api/v1/tenders?department=National%20Defence&limit=10",
   { headers: { "X-API-Key": "your_api_key_here" } }
 );
 const data = await response.json();
@@ -99,28 +89,23 @@ const data = await response.json();
 {
   "data": [
     {
-      "record_id": "abc123xyz",
-      "vendor": "Palantir Technologies Canada Inc",
-      "department": "Royal Canadian Mounted Police | Gendarmerie royale du Canada",
-      "value": 1250000.00,
-      "date": "2023-06-15",
-      "procurement_method": "Non-competitive",
-      "source_dataset": "open.canada contracts (PP-Contracts)",
+      "record_id": "tender_abc123",
+      "event_type": "tender",
+      "vendor": null,
+      "department": "National Defence | Défense nationale",
+      "value": null,
+      "date": "2023-08-01",
+      "description": "Supply and delivery of communications equipment",
+      "procurement_method": "Competitive",
+      "source_dataset": "CanadaBuys Tenders",
+      "solicitation_number": "W8476-23ABC",
       "source_url": "https://buyandsell.gc.ca/..."
     }
   ],
   "meta": {
-    "total": 47,
-    "limit": 5,
-    "offset": 5
-  }
-}
-```
-```json 400
-{
-  "error": {
-    "code": "BAD_REQUEST",
-    "message": "Invalid date format for date_from. Use ISO 8601 (YYYY-MM-DD)."
+    "total": 97000,
+    "limit": 10,
+    "offset": 0
   }
 }
 ```

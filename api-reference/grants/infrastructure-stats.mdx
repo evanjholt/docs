@@ -1,0 +1,142 @@
+---
+title: "Infrastructure Project Stats"
+description: "Aggregate statistics over the Infrastructure Canada funded projects dataset."
+api: "GET /api/v1/infrastructure_projects/stats"
+---
+
+## Overview
+
+Returns grouped aggregate statistics over the Infrastructure Canada projects dataset. Use this to answer questions like "how much federal infrastructure funding has gone to Quebec?" or "which programs have the highest total contribution?"
+
+Accepts the same filter parameters as [Infrastructure Projects](/api-reference/grants/infrastructure), so you can scope statistics to any subset before grouping.
+
+## Query Parameters
+
+<ParamField query="group_by" type="string">
+  Field to group results by. One of `province`, `program`, `status`. Default: `province`
+</ParamField>
+
+<ParamField query="sum_field" type="string">
+  Field to sum. Only `federal_contribution` is currently supported. Default: `federal_contribution`
+</ParamField>
+
+<ParamField query="q" type="string">
+  Full-text match across title, recipient, and location — applied before grouping
+</ParamField>
+
+<ParamField query="province" type="string">
+  Two-letter province code filter applied before grouping
+</ParamField>
+
+<ParamField query="program" type="string">
+  Partial match on `program_en` applied before grouping
+</ParamField>
+
+<ParamField query="status" type="string">
+  Exact match on project status applied before grouping
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum federal contribution filter applied before grouping
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum federal contribution filter applied before grouping
+</ParamField>
+
+<ParamField query="issued_after" type="string">
+  ISO 8601 approved-date lower bound applied before grouping
+</ParamField>
+
+<ParamField query="issued_before" type="string">
+  ISO 8601 approved-date upper bound applied before grouping
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Max groups to return. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/infrastructure_projects/stats?group_by=province"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/infrastructure_projects/stats",
+    headers=headers,
+    params={"group_by": "program"}
+)
+for row in response.json()["data"]:
+    print(f"{row['group_value']}: ${row['sum_value']:,.0f} across {row['record_count']} projects")
+```
+
+```javascript JavaScript
+const response = await fetch(
+  "https://api.northaxiumdata.ca/api/v1/infrastructure_projects/stats?group_by=program",
+  { headers: { "X-API-Key": "your_api_key_here" } }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "group_by": "province",
+      "group_value": "ON",
+      "record_count": 4821,
+      "sum_field": "federal_contribution",
+      "sum_value": 12400000000.00
+    },
+    {
+      "group_by": "province",
+      "group_value": "QC",
+      "record_count": 3104,
+      "sum_field": "federal_contribution",
+      "sum_value": 8750000000.00
+    }
+  ],
+  "meta": {
+    "total": 13,
+    "limit": 100,
+    "offset": 0
+  }
+}
+```
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "group_by must be one of: province, program, status."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>

@@ -24,22 +24,22 @@ Get a standardized list of active and historical federal politicians, their part
   Defaults to `true`; set `false` to include historical politicians.
 </ParamField>
 
-<ParamField query="page" type="integer">
-  Page number. Default: `1`
-</ParamField>
-
-<ParamField query="per_page" type="integer">
+<ParamField query="limit" type="integer">
   Results per page. Default: `50`. Max: `200`
 </ParamField>
 
-<ParamField query="limit" type="integer">
-  Alias for `per_page`
+<ParamField query="offset" type="integer">
+  Result offset for pagination. Default: `0`
 </ParamField>
+
+<Note>
+  `page` and `per_page` are accepted as input aliases for `limit` and offset-based pagination respectively.
+</Note>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/politicians?party=Liberal&page=2&per_page=10" \
+curl "https://api.northaxiumdata.ca/api/v1/politicians?party=Liberal&limit=10&offset=0" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -50,8 +50,8 @@ url = "https://api.northaxiumdata.ca/api/v1/politicians"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "party": "Liberal",
-    "page": 2,
-    "per_page": 10
+    "limit": 10,
+    "offset": 0
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -64,8 +64,8 @@ const fetch = require('node-fetch');
 const url = new URL('https://api.northaxiumdata.ca/api/v1/politicians');
 url.search = new URLSearchParams({
   party: 'Liberal',
-  page: '2',
-  per_page: '10'
+  limit: '10',
+  offset: '0'
 });
 
 fetch(url, {
@@ -94,10 +94,9 @@ fetch(url, {
     }
   ],
   "meta": {
-    "total": 1,
-    "page": 2,
-    "per_page": 10,
-    "pages": 1
+    "total": 343,
+    "limit": 10,
+    "offset": 0
   }
 }
 ```

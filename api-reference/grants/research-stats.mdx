@@ -1,0 +1,138 @@
+---
+title: "Research Grant Stats"
+description: "Aggregate statistics over the NSERC and SSHRC research grants dataset."
+api: "GET /api/v1/research_grants/stats"
+---
+
+## Overview
+
+Returns grouped aggregate statistics over the research grants dataset. Use this to answer questions like "how much has NSERC awarded to Ontario institutions?" or "what are the top programs by total funding?"
+
+Accepts the same filter parameters as [Research Grants](/api-reference/grants/research), so you can scope statistics to any subset of the data before grouping.
+
+## Query Parameters
+
+<ParamField query="group_by" type="string">
+  Field to group results by. One of `source`, `institution`, `province`, `fiscal_year`. Default: `source`
+</ParamField>
+
+<ParamField query="sum_field" type="string">
+  Field to sum. Only `award_amount` is currently supported. Default: `award_amount`
+</ParamField>
+
+<ParamField query="q" type="string">
+  Full-text search across researcher name, institution, program, and keywords — applied before grouping
+</ParamField>
+
+<ParamField query="source" type="string">
+  Filter to `NSERC` or `SSHRC` before grouping
+</ParamField>
+
+<ParamField query="institution" type="string">
+  Partial match on institution name
+</ParamField>
+
+<ParamField query="province" type="string">
+  Two-letter province code — e.g. `ON`, `BC`, `QC`
+</ParamField>
+
+<ParamField query="fiscal_year" type="string">
+  Fiscal year — e.g. `2022-23`
+</ParamField>
+
+<ParamField query="min_value" type="number">
+  Minimum award amount filter applied before grouping
+</ParamField>
+
+<ParamField query="max_value" type="number">
+  Maximum award amount filter applied before grouping
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Max groups to return. Default: `100`. Max: `200`
+</ParamField>
+
+<ParamField query="offset" type="integer">
+  Result offset. Default: `0`
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -H "X-API-Key: your_api_key_here" \
+  "https://api.northaxiumdata.ca/api/v1/research_grants/stats?group_by=province"
+```
+
+```python Python
+import requests
+
+headers = {"X-API-Key": "your_api_key_here"}
+
+response = requests.get(
+    "https://api.northaxiumdata.ca/api/v1/research_grants/stats",
+    headers=headers,
+    params={"group_by": "province", "source": "NSERC"}
+)
+for row in response.json()["data"]:
+    print(f"{row['group_value']}: ${row['sum_value']:,.0f} across {row['record_count']} grants")
+```
+
+```javascript JavaScript
+const response = await fetch(
+  "https://api.northaxiumdata.ca/api/v1/research_grants/stats?group_by=province&source=NSERC",
+  { headers: { "X-API-Key": "your_api_key_here" } }
+);
+const data = await response.json();
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "data": [
+    {
+      "group_by": "province",
+      "group_value": "ON",
+      "record_count": 284500,
+      "sum_field": "award_amount",
+      "sum_value": 4823000000.00
+    },
+    {
+      "group_by": "province",
+      "group_value": "QC",
+      "record_count": 198200,
+      "sum_field": "award_amount",
+      "sum_value": 3241000000.00
+    }
+  ],
+  "meta": {
+    "total": 13,
+    "limit": 100,
+    "offset": 0
+  }
+}
+```
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "group_by must be one of: source, institution, province, fiscal_year."
+  }
+}
+```
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+```json 429
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Monthly request limit exceeded. Upgrade your plan for higher limits."
+  }
+}
+```
+</ResponseExample>
