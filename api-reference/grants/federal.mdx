@@ -38,29 +38,29 @@ Returns paginated federal grant records from the Treasury Board of Canada Secret
   ISO 8601 end date
 </ParamField>
 
-<ParamField query="page" type="integer">
-  Page number. Default: `1`
-</ParamField>
-
-<ParamField query="per_page" type="integer">
+<ParamField query="limit" type="integer">
   Results per page. Default: `50`. Max: `200`
 </ParamField>
 
-<ParamField query="limit" type="integer">
-  Alias for `per_page`
+<ParamField query="offset" type="integer">
+  Result offset for pagination. Default: `0`
 </ParamField>
+
+<Note>
+  `page` and `per_page` are accepted as input aliases. `per_page` maps to `limit`, and `page` is converted internally into the corresponding `offset`.
+</Note>
 
 <RequestExample>
 ```bash cURL
 curl -H "X-API-Key: your_api_key_here" \
-  "https://api.northaxiumdata.ca/api/v1/grants?recipient=University%20of%20Toronto&page=2&per_page=10"
+  "https://api.northaxiumdata.ca/api/v1/grants?recipient=University%20of%20Toronto&limit=10&offset=10"
 ```
 
 ```python Python
 import requests
 
 headers = {"X-API-Key": "your_api_key_here"}
-params = {"recipient": "University of Toronto", "page": 2, "per_page": 10}
+params = {"recipient": "University of Toronto", "limit": 10, "offset": 10}
 
 response = requests.get(
     "https://api.northaxiumdata.ca/api/v1/grants",
@@ -88,9 +88,8 @@ for grant in response.json()["data"]:
   ],
   "meta": {
     "total": 1276865,
-    "page": 2,
-    "per_page": 10,
-    "pages": 127687
+    "limit": 10,
+    "offset": 10
   }
 }
 ```

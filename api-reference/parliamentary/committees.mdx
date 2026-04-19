@@ -12,22 +12,22 @@ Get a standardized list of standing, special, and legislative committees, includ
   Partial match on committee name.
 </ParamField>
 
-<ParamField query="page" type="integer">
-  Page number. Default: `1`
-</ParamField>
-
-<ParamField query="per_page" type="integer">
+<ParamField query="limit" type="integer">
   Results per page. Default: `50`. Max: `200`
 </ParamField>
 
-<ParamField query="limit" type="integer">
-  Alias for `per_page`
+<ParamField query="offset" type="integer">
+  Result offset for pagination. Default: `0`
 </ParamField>
+
+<Note>
+  `page` and `per_page` are accepted as input aliases. `per_page` maps to `limit`, and `page` is converted internally into the corresponding `offset`.
+</Note>
 
 <RequestExample>
 
 ```bash cURL
-curl "https://api.northaxiumdata.ca/api/v1/committees?q=industry&page=2&per_page=10" \
+curl "https://api.northaxiumdata.ca/api/v1/committees?q=industry&limit=10&offset=10" \
   -H "X-API-Key: <your-api-key>"
 ```
 
@@ -38,8 +38,8 @@ url = "https://api.northaxiumdata.ca/api/v1/committees"
 headers = {"X-API-Key": "<your-api-key>"}
 params = {
     "q": "industry",
-    "page": 2,
-    "per_page": 10
+    "limit": 10,
+    "offset": 10
 }
 
 response = requests.get(url, headers=headers, params=params)
@@ -52,8 +52,8 @@ const fetch = require('node-fetch');
 const url = new URL('https://api.northaxiumdata.ca/api/v1/committees');
 url.search = new URLSearchParams({
   q: 'industry',
-  page: '2',
-  per_page: '10'
+  limit: '10',
+  offset: '10'
 });
 
 fetch(url, {
@@ -81,9 +81,8 @@ fetch(url, {
   ],
   "meta": {
     "total": 1,
-    "page": 2,
-    "per_page": 10,
-    "pages": 1
+    "limit": 10,
+    "offset": 10
   }
 }
 ```

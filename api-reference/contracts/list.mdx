@@ -59,7 +59,7 @@ There are only 3 steps for making a successful API call:
 </ParamField>
 
 <Note>
-  `page` and `per_page` are accepted as input aliases for `limit` and offset-based pagination respectively.
+  `page` and `per_page` are accepted as input aliases. `per_page` maps to `limit`, and `page` is converted internally into the corresponding `offset`.
 </Note>
 
 <RequestExample>

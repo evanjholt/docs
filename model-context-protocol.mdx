@@ -33,32 +33,15 @@ MCP access requires a Developer or Pro plan. [Sign up at northaxiumdata.ca](http
 ### 1. Get the server package
 
 ```bash
-mkdir NorthAxiumData
-cd NorthAxiumData
+cd /path/to/NorthAxiumData/api
 pip install -r requirements.txt
 ```
 
 <Note>
-  Contact [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca) to receive the NorthAxium Data MCP server package and installation instructions.
+  Contact [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca) if you need the NorthAxium Data MCP package or install instructions.
 </Note>
 
-### 2. Configure your environment
-
-Create a `.env` file in the repo root with your database connection details:
-
-```bash
-NA_PG_HOST=postgis.railway.internal
-NA_PG_PORT=5432
-NA_PG_DB=railway
-NA_PG_USER=postgres
-NA_PG_PASSWORD=your_password_here
-```
-
-<Note>
-  Contact [support@northaxiumdata.ca](mailto:support@northaxiumdata.ca) to receive your hosted database credentials.
-</Note>
-
-### 3. Add to Claude Desktop config
+### 2. Add to Claude Desktop config
 
 Open your Claude Desktop configuration file:
 
@@ -73,15 +56,22 @@ Add the NorthAxium Data server entry:
     "northaxium-data": {
       "command": "python3",
       "args": ["-m", "mcp_server.server"],
-      "cwd": "/absolute/path/to/NorthAxiumData"
+      "cwd": "/absolute/path/to/NorthAxiumData/api",
+      "env": {
+        "NORTHAXIUM_API_KEY": "your_api_key_here"
+      }
     }
   }
 }
 ```
 
-Replace `/absolute/path/to/NorthAxiumData` with the full path to the cloned repo on your machine.
+Replace `/absolute/path/to/NorthAxiumData/api` with the full path to the `api` directory on your machine.
 
-### 4. Restart Claude Desktop
+<Note>
+  `NORTHAXIUM_API_BASE_URL` is optional. Leave it unset unless NorthAxium provides you a non-default API base URL.
+</Note>
+
+### 3. Restart Claude Desktop
 
 Quit Claude Desktop completely — do not just close the window — and relaunch it. The `northaxium-data` server should appear in the tools panel.
 
@@ -89,7 +79,9 @@ Quit Claude Desktop completely — do not just close the window — and relaunch
 
 **Tools not appearing** — make sure you fully quit and relaunched Claude Desktop. A window close is not a restart.
 
-**Database connection error** — verify the `.env` file is in the repo root and all `NA_PG_*` values are set. Run `python3 -c "import dotenv; dotenv.load_dotenv(); import os; print(os.getenv('NA_PG_HOST'))"` to confirm the env loads correctly.
+**`NORTHAXIUM_API_KEY` not set** — verify the `env` block is present in your Claude Desktop config and that the key is valid for a Developer or Pro plan.
+
+**Authentication error** — the MCP server authenticates against the live NorthAxium Data REST API over HTTPS. It does not connect directly to a hosted Postgres database.
 
 **Import errors** — run `pip install -r requirements.txt` again from inside the repo directory.
 
@@ -104,13 +96,16 @@ Cursor support via stdio is available using the same setup as Claude Desktop. Ad
     "northaxium-data": {
       "command": "python3",
       "args": ["-m", "mcp_server.server"],
-      "cwd": "/absolute/path/to/NorthAxiumData"
+      "cwd": "/absolute/path/to/NorthAxiumData/api",
+      "env": {
+        "NORTHAXIUM_API_KEY": "your_api_key_here"
+      }
     }
   }
 }
 ```
 
-Follow the same prerequisites and environment setup from the Claude Desktop tab.
+Follow the same prerequisites and API-key setup from the Claude Desktop tab.
 
   </Tab>
   <Tab title="Other Clients">
@@ -161,7 +156,7 @@ Once connected, your AI assistant has access to 15 tools across 6 domains.
 
 ## Authentication
 
-The MCP server authenticates using your NorthAxium Data API key. The key is read from the `.env` file in the repo root at server startup — it is never sent over the network directly by the MCP layer.
+The MCP server authenticates using your NorthAxium Data API key. The server reads `NORTHAXIUM_API_KEY` from the local environment and uses it to call the live NorthAxium Data REST API over HTTPS. It does not connect directly to NorthAxium Postgres.
 
 MCP access is gated by plan:
 
