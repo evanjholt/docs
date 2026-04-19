@@ -1,0 +1,124 @@
+---
+title: "Zoning Lookup"
+api: "GET /api/v1/zone"
+description: "Look up the zoning classification at a latitude and longitude for covered municipalities."
+---
+
+Look up the zoning polygon that intersects a point. This endpoint is currently available for:
+
+- `toronto`
+- `calgary`
+- `edmonton`
+- `vancouver`
+- `winnipeg`
+- `ottawa`
+- `mississauga`
+- `kitchener`
+- `hamilton`
+- `quebec_city`
+
+If multiple zoning polygons intersect the point, the API returns the smallest matching polygon to prefer the most specific zone.
+
+### Query Parameters
+
+<ParamField query="lat" type="number" required>
+  Latitude in decimal degrees.
+</ParamField>
+
+<ParamField query="lng" type="number" required>
+  Longitude in decimal degrees.
+</ParamField>
+
+<ParamField query="municipality" type="string">
+  Optional municipality slug. One of `toronto`, `calgary`, `edmonton`, `vancouver`, `winnipeg`, `ottawa`, `mississauga`, `kitchener`, `hamilton`, or `quebec_city`.
+</ParamField>
+
+<RequestExample>
+
+```bash cURL
+curl "https://api.northaxiumdata.ca/api/v1/zone?lat=43.6532&lng=-79.3832&municipality=toronto" \
+  -H "X-API-Key: <your-api-key>"
+```
+
+```python Python
+import requests
+
+url = "https://api.northaxiumdata.ca/api/v1/zone"
+headers = {"X-API-Key": "<your-api-key>"}
+params = {
+    "lat": 43.6532,
+    "lng": -79.3832,
+    "municipality": "toronto",
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript Node.js
+const fetch = require('node-fetch');
+
+const url = new URL('https://api.northaxiumdata.ca/api/v1/zone');
+url.search = new URLSearchParams({
+  lat: '43.6532',
+  lng: '-79.3832',
+  municipality: 'toronto'
+});
+
+fetch(url, {
+  headers: {
+    'X-API-Key': '<your-api-key>'
+  }
+})
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "data": {
+    "record_id": "a0b1c2d3e4f5",
+    "municipality": "toronto",
+    "province": "ON",
+    "zone_code": "CR",
+    "zone_description": "CR",
+    "zone_category": null,
+    "source_dataset": "toronto zoning area",
+    "source_url": "https://ckan0.cf.opendata.inter.prod-toronto.ca/...",
+    "last_updated": "2026-04-16T12:34:56"
+  }
+}
+```
+
+```json 400
+{
+  "error": {
+    "code": "BAD_REQUEST",
+    "message": "lat and lng are required."
+  }
+}
+```
+
+```json 401
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Missing API key. Pass your key in the X-API-Key header."
+  }
+}
+```
+
+```json 404
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Zone not found."
+  }
+}
+```
+
+</ResponseExample>

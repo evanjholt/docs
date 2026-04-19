@@ -129,7 +129,8 @@
             "group": "Permits",
             "icon": "clipboard-check",
             "pages": [
-              "api-reference/permits/list"
+              "api-reference/permits/list",
+              "api-reference/permits/zone"
             ]
           },
           {
