@@ -3,11 +3,11 @@ title: "MCP Server"
 description: "Connect Claude and other AI agents directly to NorthAxium Data via the Model Context Protocol."
 ---
 
-Your AI assistant can use the NorthAxium Data MCP server to query Canadian government data in natural language — contracts, lobbying, grants, contributions, parliamentary activity, and building permits — without writing a single API call.
+Your AI assistant can use the NorthAxium Data MCP server to query Canadian government data in natural language — contracts, tenders, awards, lobbying, grants, contributions, parliamentary activity, building permits, and zoning — without writing a single API call.
 
 ## Overview
 
-The MCP (Model Context Protocol) server exposes 15 tools across 6 domains. Once connected, your AI assistant handles the reasoning while NorthAxium Data supplies the ground truth from primary government sources.
+The MCP (Model Context Protocol) server exposes 19 tools across 7 domains. Once connected, your AI assistant handles the reasoning while NorthAxium Data supplies the ground truth from primary government sources.
 
 There is currently one way to connect:
 
@@ -119,7 +119,7 @@ Any MCP-compatible client that supports stdio transport can connect to the North
 
 ## MCP Tools
 
-Once connected, your AI assistant has access to 15 tools across 6 domains.
+Once connected, your AI assistant has access to 19 tools across 7 domains.
 
 **Procurement**
 
@@ -127,6 +127,9 @@ Once connected, your AI assistant has access to 15 tools across 6 domains.
 - **`search_vendors`** — Browse distinct vendor name strings to resolve ambiguous vendor names before profiling. Use before `get_vendor_profile`.
 - **`get_vendor_profile`** — Aggregated procurement profile for a named vendor: total contract value, top departments, contract count, and recent awards.
 - **`get_department_profile`** — Aggregated procurement profile for a federal department: total spend, top vendors, and event type breakdown.
+- **`search_tenders`** — Search federal tender notices — open and historical solicitations published on CanadaBuys. Use to find active procurement opportunities or to retrieve a `solicitation_number` for lifecycle tracing.
+- **`search_awards`** — Search federal award notices — announcements of intent to award a contract. Useful for early signal on who won a competition before the final contract is signed.
+- **`get_procurement_lifecycle`** — Return the full procurement lifecycle for a solicitation number: the tender, award notices, and awarded contracts all linked together. Use when you have a `solicitation_number` and want to trace the complete chain.
 
 **Grants**
 
@@ -154,6 +157,10 @@ Once connected, your AI assistant has access to 15 tools across 6 domains.
 
 - **`search_permits`** — Search building permits across 17 Canadian municipalities. Supports proximity search by latitude, longitude, and radius in kilometres.
 
+**Zoning**
+
+- **`lookup_zone`** — Look up the zoning classification at a lat/lng coordinate. Returns zone code, zone description, zone category, municipality, and province. Available for: toronto, calgary, edmonton, vancouver, winnipeg, ottawa, mississauga, kitchener, hamilton, quebec_city.
+
 ## Authentication
 
 The MCP server authenticates using your NorthAxium Data API key. The server reads `NORTHAXIUM_API_KEY` from the local environment and uses it to call the live NorthAxium Data REST API over HTTPS. It does not connect directly to NorthAxium Postgres.
@@ -177,6 +184,7 @@ After connecting, try asking Claude questions like:
 - *"Who are the top vendors for the Department of National Defence by contract value?"*
 - *"What federal contracts has Shopify won?"*
 - *"Find all new construction permits in Calgary over $1M issued in the last year"*
+- *"What zone is 123 King Street West in Toronto?"*
 - *"Which companies are lobbying most actively on mining and natural resources?"*
 - *"Show me Mark Carney's lobbying interactions as a DPOH before he entered politics"*
 - *"How much has the University of Toronto received in NSERC grants over the last 10 years?"*
